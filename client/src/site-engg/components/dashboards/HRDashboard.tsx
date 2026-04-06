@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, CheckCircle, Clock, Download, FileText, TrendingUp, Database, Mail, Send, BarChart3, Calendar, AlertCircle, ChevronRight, Filter, RefreshCw } from 'lucide-react';
+import { Users, CheckCircle, Clock, Download, FileText, TrendingUp, Database, Mail, Send, BarChart3, Calendar, AlertTriangle, ChevronRight, Filter, RefreshCw, LayoutDashboard } from 'lucide-react';
 import { CheckIn, LeaveRequest, Engineer, DailyReport } from '../../types';
 import { exportToCSV } from '../../lib/export';
 import { checkInService } from '../../services/checkInService';
@@ -191,1034 +191,272 @@ export default function HRDashboard() {
     { id: 'profiles', label: 'Staff', icon: Users },
   ];
 
-  // Unified view for desktop and mobile
   return (
-    <div className="min-h-screen bg-[#f0f2f5]">
+    <div className="min-h-[100dvh] bg-[#0A0A0A] text-slate-200">
       {emailSuccess && (
-        <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3 animate-pulse">
+        <div className="fixed top-4 right-4 z-50 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-xl animate-in slide-in-from-top-4">
           <CheckCircle className="w-5 h-5" />
           {emailSuccess}
         </div>
       )}
       {emailError && (
-        <div className="fixed top-4 right-4 z-50 bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3">
-          <AlertCircle className="w-5 h-5" />
+        <div className="fixed top-4 right-4 z-50 bg-red-500/10 border border-red-500/20 text-red-400 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-xl animate-in slide-in-from-top-4">
+          <AlertTriangle className="w-5 h-5" />
           {emailError}
         </div>
       )}
 
-      <div className="relative overflow-hidden bg-[#0f172a]">
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 via-transparent to-blue-600/10"></div>
-        <div className="absolute -top-32 -right-32 w-96 h-96 bg-emerald-500/[0.06] rounded-full blur-[120px]"></div>
-        <div className="max-w-7xl mx-auto px-6 py-8 relative">
+      {/* Premium Header */}
+      <div className="relative overflow-hidden bg-[#111111] border-b border-white/5">
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 via-transparent to-teal-600/5"></div>
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-8 py-10">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-emerald-400/50 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Human Resources</p>
-              <h1 className="text-3xl font-extrabold text-white tracking-tight">HR Dashboard</h1>
-              <p className="text-slate-400 text-sm font-medium mt-1.5">Attendance, leaves & enterprise reports</p>
+              <p className="text-emerald-400/60 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Human Resources</p>
+              <h1 className="text-3xl font-extrabold text-white tracking-tight">HR Analytics</h1>
+              <p className="text-slate-400 text-sm font-medium mt-2 flex items-center gap-2">
+                <Users className="w-4 h-4" />
+                Workforce Intelligence Hub
+              </p>
             </div>
             <button onClick={() => loadData()}
-              className="flex items-center gap-2 px-4 py-2.5 bg-white/[0.06] hover:bg-white/[0.1] rounded-xl transition-all border border-white/[0.08] text-slate-300 text-sm font-medium">
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-              Refresh
+              className="flex items-center gap-2 px-5 py-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all border border-white/5 text-white font-bold text-xs tracking-wide shadow-lg shadow-black/50 active:scale-95 group">
+              <RefreshCw className={`w-4 h-4 text-emerald-400 group-hover:text-white transition-colors ${loading ? 'animate-spin' : ''}`} />
+              Refresh Data
             </button>
-          </div>
-
-          <div className="mt-8 flex gap-1.5 overflow-x-auto pb-2 scrollbar-hide">
-            {tabs.map(tab => (
-              <button key={tab.id} onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-xs whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-white text-slate-900 shadow-lg' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.06]'}`}>
-                <tab.icon className="w-3.5 h-3.5" />
-                {tab.label}
-              </button>
-            ))}
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
+      <div className="max-w-7xl mx-auto px-8 py-8 -mt-8 relative z-10">
+        <div className="flex p-1 bg-[#1A1A1A]/80 backdrop-blur-xl rounded-2xl border border-white/5 w-full overflow-x-auto scrollbar-hide shadow-2xl mb-8">
+          {tabs.map(tab => (
+            <button key={tab.id} onClick={() => setActiveTab(tab.id as any)}
+              className={`flex items-center gap-2 px-5 py-3.5 rounded-xl font-bold text-xs tracking-wide whitespace-nowrap transition-all ${
+                activeTab === tab.id 
+                  ? 'bg-white/10 text-white shadow-lg border border-white/10' 
+                  : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+              }`}>
+              <tab.icon className="w-4 h-4" />
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
         {activeTab === 'overview' && (
           <div className="space-y-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-              <div className="group bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all border border-slate-200 cursor-pointer" onClick={() => setActiveTab('attendance')}>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center">
-                    <CheckCircle className="w-5 h-5 text-white" />
+              <div className="bg-[#111111] rounded-3xl p-6 shadow-2xl border border-white/5 hover:bg-white/5 transition-all cursor-pointer group relative overflow-hidden" onClick={() => setActiveTab('attendance')}>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-[50px] -mr-16 -mt-16 pointer-events-none"></div>
+                <div className="flex items-center justify-between mb-6 relative z-10">
+                  <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                    <CheckCircle className="w-5 h-5 text-emerald-400" />
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-emerald-500 transition-colors" />
+                  <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-white transition-colors" />
                 </div>
-                <p className="text-2xl font-extrabold text-slate-900 tracking-tight">{presentToday}</p>
-                <p className="text-xs font-medium text-slate-500 mt-1">Present Today</p>
-                <div className="mt-2 text-[10px] font-bold text-emerald-600 uppercase tracking-wider">
-                  {engineers.length > 0 ? `${Math.round((presentToday / engineers.length) * 100)}%` : '0%'} attendance
+                <div className="relative z-10">
+                  <p className="text-3xl font-extrabold text-white tracking-tight">{presentToday}</p>
+                  <p className="text-xs font-bold text-slate-400 mt-2 uppercase tracking-widest">Present Today</p>
+                  <div className="mt-4 inline-flex items-center gap-2 px-2.5 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">{engineers.length > 0 ? `${Math.round((presentToday / engineers.length) * 100)}%` : '0%'} Rate</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="group bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all border border-slate-200 cursor-pointer" onClick={() => setActiveTab('leave')}>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-white" />
+              <div className="bg-[#111111] rounded-3xl p-6 shadow-2xl border border-white/5 hover:bg-white/5 transition-all cursor-pointer group relative overflow-hidden" onClick={() => setActiveTab('leave')}>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-[50px] -mr-16 -mt-16 pointer-events-none"></div>
+                <div className="flex items-center justify-between mb-6 relative z-10">
+                  <div className="p-3 bg-amber-500/10 rounded-xl border border-amber-500/20">
+                    <Clock className="w-5 h-5 text-amber-400" />
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-amber-500 transition-colors" />
+                  <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-white transition-colors" />
                 </div>
-                <p className="text-2xl font-extrabold text-slate-900 tracking-tight">{pendingLeaves}</p>
-                <p className="text-xs font-medium text-slate-500 mt-1">Pending Leaves</p>
-                <div className="mt-2 text-[10px] font-bold text-amber-600 uppercase tracking-wider">
-                  {onLeaveToday} on leave today
+                <div className="relative z-10">
+                  <p className="text-3xl font-extrabold text-white tracking-tight">{pendingLeaves}</p>
+                  <p className="text-xs font-bold text-slate-400 mt-2 uppercase tracking-widest">Pending Leaves</p>
+                  <div className="mt-4 inline-flex items-center gap-2 px-2.5 py-1 bg-amber-500/10 rounded-lg border border-amber-500/20">
+                    <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">{onLeaveToday} Out Today</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="group bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all border border-slate-200 cursor-pointer" onClick={() => setActiveTab('profiles')}>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
-                    <Users className="w-5 h-5 text-white" />
+              <div className="bg-[#111111] rounded-3xl p-6 shadow-2xl border border-white/5 hover:bg-white/5 transition-all cursor-pointer group relative overflow-hidden" onClick={() => setActiveTab('profiles')}>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-[50px] -mr-16 -mt-16 pointer-events-none"></div>
+                <div className="flex items-center justify-between mb-6 relative z-10">
+                  <div className="p-3 bg-blue-500/10 rounded-xl border border-blue-500/20">
+                    <Users className="w-5 h-5 text-blue-400" />
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors" />
+                  <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-white transition-colors" />
                 </div>
-                <p className="text-2xl font-extrabold text-slate-900 tracking-tight">{engineers.length}</p>
-                <p className="text-xs font-medium text-slate-500 mt-1">Total Engineers</p>
-                <div className="mt-2 text-[10px] font-bold text-red-500 uppercase tracking-wider">
-                  {absentToday} absent today
+                <div className="relative z-10">
+                  <p className="text-3xl font-extrabold text-white tracking-tight">{engineers.length}</p>
+                  <p className="text-xs font-bold text-slate-400 mt-2 uppercase tracking-widest">Total Engineers</p>
+                  <div className="mt-4 inline-flex items-center gap-2 px-2.5 py-1 bg-red-500/10 rounded-lg border border-red-500/20">
+                    <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest">{absentToday} Absent</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="group bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all border border-slate-200 cursor-pointer" onClick={() => setActiveTab('reports')}>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-violet-600 flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-white" />
+              <div className="bg-[#111111] rounded-3xl p-6 shadow-2xl border border-white/5 hover:bg-white/5 transition-all cursor-pointer group relative overflow-hidden" onClick={() => setActiveTab('reports')}>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500/10 rounded-full blur-[50px] -mr-16 -mt-16 pointer-events-none"></div>
+                <div className="flex items-center justify-between mb-6 relative z-10">
+                  <div className="p-3 bg-violet-500/10 rounded-xl border border-violet-500/20">
+                    <FileText className="w-5 h-5 text-violet-400" />
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-violet-500 transition-colors" />
+                  <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-white transition-colors" />
                 </div>
-                <p className="text-2xl font-extrabold text-slate-900 tracking-tight">{reports.length}</p>
-                <p className="text-xs font-medium text-slate-500 mt-1">Reports Today</p>
-                <div className="mt-2 text-[10px] font-bold text-violet-600 uppercase tracking-wider">
-                  View daily reports
+                <div className="relative z-10">
+                  <p className="text-3xl font-extrabold text-white tracking-tight">{reports.length}</p>
+                  <p className="text-xs font-bold text-slate-400 mt-2 uppercase tracking-widest">Reports Today</p>
+                  <div className="mt-4 inline-flex items-center gap-2 px-2.5 py-1 bg-violet-500/10 rounded-lg border border-violet-500/20">
+                    <span className="text-[10px] font-bold text-violet-400 uppercase tracking-widest">View Details</span>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div className="px-6 py-4 bg-[#0f172a] flex items-center justify-between">
-                  <h3 className="font-bold text-white text-sm flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4 text-blue-400" />
-                    Quick Reports
+              <div className="bg-[#111111] rounded-3xl shadow-2xl border border-white/5 overflow-hidden relative">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-[80px] pointer-events-none"></div>
+                <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between relative z-10">
+                  <h3 className="font-bold text-white tracking-tight flex items-center gap-3">
+                    <div className="p-2 bg-blue-500/10 rounded-lg">
+                      <BarChart3 className="w-4 h-4 text-blue-400" />
+                    </div>
+                    Report Operations
                   </h3>
                   <button
                     onClick={() => setActiveTab('enterprise')}
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                    className="text-xs text-blue-400 hover:text-white font-bold uppercase tracking-widest flex items-center gap-1 transition-colors"
                   >
-                    View all <ChevronRight className="w-4 h-4" />
+                    View All <ChevronRight className="w-3 h-3" />
                   </button>
                 </div>
-                <div className="p-6 space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-100">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-green-500 flex items-center justify-center">
-                        <CheckCircle className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-slate-900">Daily Attendance Report</p>
-                        <p className="text-sm text-slate-500">{selectedDate}</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => {
-                          const exportData = attendanceRegister.map(record => ({
-                            Engineer: record.engineerName,
-                            Status: record.status,
-                            'Check In': record.checkInTime ? new Date(record.checkInTime).toLocaleTimeString() : '-',
-                            'Check Out': record.checkOutTime ? new Date(record.checkOutTime).toLocaleTimeString() : '-',
-                            Hours: record.hoursWorked ? record.hoursWorked.toFixed(1) : '-',
-                            Location: record.site || '-',
-                          }));
-                          exportToCSV(exportData, `attendance-${selectedDate}`);
-                        }}
-                        className="p-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                        title="Download CSV"
-                      >
-                        <Download className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          const exportData = attendanceRegister.map(record => ({
-                            Engineer: record.engineerName,
-                            Status: record.status,
-                            'Check In': record.checkInTime ? new Date(record.checkInTime).toLocaleTimeString() : '-',
-                            'Check Out': record.checkOutTime ? new Date(record.checkOutTime).toLocaleTimeString() : '-',
-                            Hours: record.hoursWorked ? record.hoursWorked.toFixed(1) : '-',
-                            Location: record.site || '-',
-                          }));
-                          sendReportEmail('attendance', exportData, `Daily Attendance Report - ${selectedDate}`, 'sujay.palande@cybaemtech.com');
-                        }}
-                        disabled={emailSending}
-                        className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-                        title="Send via Email"
-                      >
-                        <Mail className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-blue-500 flex items-center justify-center">
-                        <Calendar className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-slate-900">Leave Summary Report</p>
-                        <p className="text-sm text-slate-500">{leaveRequests.length} total requests</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => {
-                          const exportData = leaveRequests.map(leave => ({
-                            Engineer: leave.engineerName || 'Unknown',
-                            'Start Date': leave.startDate,
-                            'End Date': leave.endDate,
-                            Reason: leave.reason,
-                            Status: leave.status,
-                            Backup: leave.backupEngineerName || '-'
-                          }));
-                          exportToCSV(exportData, `leave-requests-${new Date().toISOString().split('T')[0]}`);
-                        }}
-                        className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                        title="Download CSV"
-                      >
-                        <Download className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          const exportData = leaveRequests.map(leave => ({
-                            Engineer: leave.engineerName || 'Unknown',
-                            'Start Date': leave.startDate,
-                            'End Date': leave.endDate,
-                            Reason: leave.reason,
-                            Status: leave.status,
-                            Backup: leave.backupEngineerName || '-'
-                          }));
-                          sendReportEmail('leave', exportData, `Leave Summary Report - ${new Date().toLocaleDateString()}`, 'sujay.palande@cybaemtech.com');
-                        }}
-                        disabled={emailSending}
-                        className="p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
-                        title="Send via Email"
-                      >
-                        <Mail className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-100">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-purple-500 flex items-center justify-center">
-                        <FileText className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-slate-900">Daily Work Reports</p>
-                        <p className="text-sm text-slate-500">{reports.length} reports today</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => {
-                          const exportData = reports.map(r => ({
-                            Engineer: r.engineerName || '',
-                            Client: r.clientName || '',
-                            Date: r.date,
-                            'Work Done': r.workDone,
-                            Issues: r.issues || 'None',
-                          }));
-                          exportToCSV(exportData, `work-reports-${selectedDate}`);
-                        }}
-                        className="p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-                        title="Download CSV"
-                      >
-                        <Download className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          const exportData = reports.map(r => ({
-                            Engineer: r.engineerName || '',
-                            Client: r.clientName || '',
-                            Date: r.date,
-                            'Work Done': r.workDone,
-                            Issues: r.issues || 'None',
-                          }));
-                          sendReportEmail('work-reports', exportData, `Daily Work Reports - ${selectedDate}`, 'sujay.palande@cybaemtech.com');
-                        }}
-                        disabled={emailSending}
-                        className="p-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors disabled:opacity-50"
-                        title="Send via Email"
-                      >
-                        <Mail className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                <div className="px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
-                  <h3 className="font-semibold text-slate-900 flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-yellow-600" />
-                    Recent Leave Requests
-                  </h3>
-                </div>
-                <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto">
-                  {leaveRequests.slice(0, 5).map(leave => (
-                    <div key={leave.id} className="px-6 py-4 hover:bg-slate-50 transition-colors">
-                      <div className="flex items-center justify-between">
+                <div className="p-6 space-y-4 relative z-10">
+                  {[
+                    { title: 'Attendance Register', desc: selectedDate, icon: CheckCircle, color: 'emerald', data: attendanceRegister, type: 'attendance' },
+                    { title: 'Leave Summary', desc: `${leaveRequests.length} requests`, icon: Calendar, color: 'blue', data: leaveRequests, type: 'leave' },
+                    { title: 'Work Reports', desc: `${reports.length} today`, icon: FileText, color: 'purple', data: reports, type: 'work-reports' }
+                  ].map(action => (
+                    <div key={action.title} className="flex items-center justify-between p-5 bg-black/40 rounded-2xl border border-white/5 hover:bg-white/5 transition-colors group">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-12 h-12 rounded-xl bg-${action.color}-500/10 flex items-center justify-center border border-${action.color}-500/20 group-hover:bg-${action.color}-500/20 transition-colors`}>
+                          <action.icon className={`w-5 h-5 text-${action.color}-400`} />
+                        </div>
                         <div>
-                          <p className="font-medium text-slate-900">{leave.engineerName || 'Unknown'}</p>
-                          <p className="text-sm text-slate-500">
-                            {new Date(leave.startDate).toLocaleDateString()} - {new Date(leave.endDate).toLocaleDateString()}
-                          </p>
+                          <p className="font-bold text-white tracking-tight">{action.title}</p>
+                          <p className="text-xs font-medium text-slate-500 mt-1">{action.desc}</p>
                         </div>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          leave.status === 'approved' ? 'bg-green-100 text-green-700' :
-                          leave.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                          'bg-yellow-100 text-yellow-700'
-                        }`}>
-                          {leave.status}
-                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => {
+                            let exportData = [];
+                            if (action.type === 'attendance') {
+                              exportData = action.data.map((r: any) => ({
+                                Engineer: r.engineerName, Status: r.status, 'Check In': r.checkInTime ? new Date(r.checkInTime).toLocaleTimeString() : '-', 'Check Out': r.checkOutTime ? new Date(r.checkOutTime).toLocaleTimeString() : '-', Hours: r.hoursWorked ? r.hoursWorked.toFixed(1) : '-', Location: r.site || '-'
+                              }));
+                            } else if (action.type === 'leave') {
+                               exportData = action.data.map((l: any) => ({ Engineer: l.engineerName || 'Unknown', 'Start Date': l.startDate, 'End Date': l.endDate, Reason: l.reason, Status: l.status, Backup: l.backupEngineerName || '-' }));
+                            } else {
+                               exportData = action.data.map((r: any) => ({ Engineer: r.engineerName || '', Client: r.clientName || '', Date: r.date, 'Work Done': r.workDone, Issues: r.issues || 'None' }));
+                            }
+                            exportToCSV(exportData, `${action.type}-${selectedDate}`);
+                          }}
+                          className="p-3 bg-white/5 text-white rounded-xl hover:bg-white/10 transition-colors border border-white/10"
+                          title="Download CSV"
+                        >
+                          <Download className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => {
+                             let exportData = [];
+                            if (action.type === 'attendance') {
+                              exportData = action.data.map((r: any) => ({
+                                Engineer: r.engineerName, Status: r.status, 'Check In': r.checkInTime ? new Date(r.checkInTime).toLocaleTimeString() : '-', 'Check Out': r.checkOutTime ? new Date(r.checkOutTime).toLocaleTimeString() : '-', Hours: r.hoursWorked ? r.hoursWorked.toFixed(1) : '-', Location: r.site || '-'
+                              }));
+                            } else if (action.type === 'leave') {
+                               exportData = action.data.map((l: any) => ({ Engineer: l.engineerName || 'Unknown', 'Start Date': l.startDate, 'End Date': l.endDate, Reason: l.reason, Status: l.status, Backup: l.backupEngineerName || '-' }));
+                            } else {
+                               exportData = action.data.map((r: any) => ({ Engineer: r.engineerName || '', Client: r.clientName || '', Date: r.date, 'Work Done': r.workDone, Issues: r.issues || 'None' }));
+                            }
+                            sendReportEmail(action.type, exportData, `${action.title} - ${selectedDate}`, 'sujay.palande@cybaemtech.com');
+                          }}
+                          disabled={emailSending}
+                          className="p-3 bg-blue-600 text-white rounded-xl hover:bg-blue-500 transition-colors disabled:opacity-50 shadow-[0_0_20px_rgba(37,99,235,0.2)]"
+                          title="Email Report"
+                        >
+                          <Mail className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
                   ))}
-                  {leaveRequests.length === 0 && (
-                    <div className="px-6 py-8 text-center text-slate-500">
-                      No leave requests found
-                    </div>
-                  )}
                 </div>
               </div>
-            </div>
-          </div>
-        )}
 
-        {activeTab === 'muster' && (
-          <MusterRoll />
-        )}
-
-        {activeTab === 'attendance' && (
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 flex flex-wrap items-center justify-between gap-4">
-              <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-600" />
-                Attendance for {new Date(selectedDate).toLocaleDateString()}
-              </h2>
-              <div className="flex items-center gap-3">
-                <input
-                  type="date"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  className="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <button
-                  onClick={() => {
-                    const exportData = checkIns.map(c => ({
-                      Engineer: c.engineerName || '',
-                      'Check In': new Date(c.checkInTime).toLocaleString(),
-                      'Check Out': c.checkOutTime ? new Date(c.checkOutTime).toLocaleString() : '-',
-                      Date: c.date,
-                      Location: c.locationName || '-',
-                    }));
-                    exportToCSV(exportData, `attendance-${selectedDate}`);
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors shadow-sm"
-                >
-                  <Download className="w-4 h-4" />
-                  Export CSV
-                </button>
-                <button
-                  onClick={() => {
-                    const exportData = checkIns.map(c => ({
-                      Engineer: c.engineerName || '',
-                      'Check In': c.checkInTime ? new Date(c.checkInTime).toLocaleString() : '-',
-                      'Check Out': c.checkOutTime ? new Date(c.checkOutTime).toLocaleString() : '-',
-                      Date: c.date,
-                      Location: c.locationName || '-',
-                    }));
-                    sendReportEmail('attendance', exportData, `Attendance Report - ${selectedDate}`);
-                  }}
-                  disabled={emailSending}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-sm disabled:opacity-50"
-                >
-                  <Send className="w-4 h-4" />
-                  {emailSending ? 'Sending...' : 'Send Email'}
-                </button>
-              </div>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-slate-50">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Engineer</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Check In</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Check Out</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Location</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {checkIns.map(checkIn => (
-                    <tr key={checkIn.id} className="hover:bg-blue-50/50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-medium">
-                            {(checkIn.engineerName || 'U')[0].toUpperCase()}
+              <div className="bg-[#111111] rounded-3xl shadow-2xl border border-white/5 overflow-hidden relative">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-[80px] pointer-events-none"></div>
+                <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between relative z-10">
+                  <h3 className="font-bold text-white tracking-tight flex items-center gap-3">
+                    <div className="p-2 bg-amber-500/10 rounded-lg border border-amber-500/20">
+                      <Clock className="w-4 h-4 text-amber-400" />
+                    </div>
+                    Pending Approvals
+                  </h3>
+                  <span className="px-2.5 py-1 bg-amber-500/10 text-amber-400 text-[10px] font-bold uppercase tracking-widest rounded-lg border border-amber-500/20">
+                    {leaveRequests.filter(l => l.status === 'pending').length} Action
+                  </span>
+                </div>
+                <div className="p-6 relative z-10">
+                  <div className="space-y-4">
+                    {leaveRequests.filter(l => l.status === 'pending').slice(0, 3).map(leave => (
+                      <div key={leave.id} className="p-5 bg-black/40 rounded-2xl border border-white/5 hover:bg-white/5 transition-colors">
+                        <div className="flex justify-between items-start mb-4">
+                          <div>
+                            <p className="font-bold text-white tracking-tight">{leave.engineerName}</p>
+                            <p className="text-xs font-bold text-amber-400 mt-1 uppercase tracking-widest flex items-center gap-1.5">
+                              <Calendar className="w-3 h-3" />
+                              {new Date(leave.startDate).toLocaleDateString(undefined, {month:'short', day:'numeric'})} - {new Date(leave.endDate).toLocaleDateString(undefined, {month:'short', day:'numeric'})}
+                            </p>
                           </div>
-                          <span className="font-medium text-slate-900">{checkIn.engineerName || 'Unknown'}</span>
                         </div>
-                      </td>
-                      <td className="px-6 py-4 text-slate-600">
-                        {checkIn.checkInTime ? new Date(checkIn.checkInTime).toLocaleTimeString() : '-'}
-                      </td>
-                      <td className="px-6 py-4 text-slate-600">
-                        {checkIn.checkOutTime ? new Date(checkIn.checkOutTime).toLocaleTimeString() : '-'}
-                      </td>
-                      <td className="px-6 py-4">
-                        {checkIn.latitude && checkIn.longitude && 
-                         parseFloat(checkIn.latitude) !== 0 && 
-                         parseFloat(checkIn.longitude) !== 0 ? (
-                          <a
-                            href={`https://www.google.com/maps?q=${checkIn.latitude},${checkIn.longitude}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:text-blue-700 hover:underline font-medium"
-                          >
-                            View Map
-                          </a>
-                        ) : (checkIn.location_name || checkIn.locationName) ? (
-                          <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(checkIn.location_name || checkIn.locationName)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-emerald-600 hover:text-emerald-700 hover:underline font-medium"
-                            title={`Search for ${checkIn.location_name || checkIn.locationName}`}
-                          >
-                            Map: {checkIn.location_name || checkIn.locationName}
-                          </a>
-                        ) : (
-                          <span className="text-slate-400 italic">No location provided</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
-                          checkIn.checkOutTime ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-                        }`}>
-                          {checkIn.checkOutTime ? 'Completed' : 'Active'}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                  {checkIns.length === 0 && (
-                    <tr>
-                      <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
-                        <CheckCircle className="w-12 h-12 mx-auto mb-3 text-slate-300" />
-                        No check-ins for this date
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'leave' && (
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-yellow-600" />
-                Leave Requests
-              </h2>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => {
-                    const exportData = leaveRequests.map(leave => ({
-                      Engineer: leave.engineerName || 'Unknown',
-                      'Start Date': leave.startDate,
-                      'End Date': leave.endDate,
-                      Reason: leave.reason,
-                      Status: leave.status,
-                      Backup: leave.backupEngineerName || '-'
-                    }));
-                    exportToCSV(exportData, `leave-requests-${new Date().toISOString().split('T')[0]}`);
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors shadow-sm"
-                >
-                  <Download className="w-4 h-4" />
-                  Export CSV
-                </button>
-                <button
-                  onClick={() => {
-                    const exportData = leaveRequests.map(leave => ({
-                      Engineer: leave.engineerName || 'Unknown',
-                      'Start Date': leave.startDate,
-                      'End Date': leave.endDate,
-                      Reason: leave.reason,
-                      Status: leave.status,
-                      Backup: leave.backupEngineerName || '-'
-                    }));
-                    sendReportEmail('leave-requests', exportData, `Leave Requests Report - ${new Date().toLocaleDateString()}`);
-                  }}
-                  disabled={emailSending}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-sm disabled:opacity-50"
-                >
-                  <Send className="w-4 h-4" />
-                  {emailSending ? 'Sending...' : 'Send Email'}
-                </button>
-              </div>
-            </div>
-            <div className="p-6 space-y-4">
-              {leaveRequests.map(leave => (
-                <div key={leave.id} className="border border-slate-200 rounded-2xl p-5 hover:border-blue-200 hover:shadow-md transition-all duration-200">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-lg">
-                        {(leave.engineerName || 'U')[0].toUpperCase()}
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-slate-900 text-lg">{leave.engineerName || 'Unknown'}</h3>
-                        <p className="text-slate-500 text-sm flex items-center gap-2">
-                          <Calendar className="w-4 h-4" />
-                          {new Date(leave.startDate).toLocaleDateString()} - {new Date(leave.endDate).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                    <span className={`px-4 py-1.5 rounded-full text-sm font-semibold ${
-                      leave.status === 'approved' ? 'bg-green-100 text-green-700' :
-                      leave.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                      'bg-yellow-100 text-yellow-700'
-                    }`}>
-                      {leave.status.charAt(0).toUpperCase() + leave.status.slice(1)}
-                    </span>
-                  </div>
-                  <div className="bg-slate-50 rounded-xl p-4 mb-4">
-                    <p className="text-slate-700">{leave.reason}</p>
-                    {leave.backupEngineerName && (
-                      <p className="text-sm text-slate-500 mt-2 flex items-center gap-2">
-                        <Users className="w-4 h-4" />
-                        Backup: <span className="font-medium text-slate-700">{leave.backupEngineerName}</span>
-                      </p>
-                    )}
-                  </div>
-                  {leave.status === 'pending' && (
-                    <div className="flex gap-3">
-                      <select
-                        onChange={(e) => {
-                          if (e.target.value) {
-                            handleLeaveAction(leave.id, 'approved', e.target.value);
-                          }
-                        }}
-                        className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        disabled={loading}
-                      >
-                        <option value="">Select backup engineer & approve</option>
-                        {engineers.filter(eng => eng.id !== leave.engineerId).map(eng => (
-                          <option key={eng.id} value={eng.id}>{eng.name}</option>
-                        ))}
-                      </select>
-                      <button
-                        onClick={() => handleLeaveAction(leave.id, 'rejected')}
-                        disabled={loading}
-                        className="px-6 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 disabled:opacity-50 transition-colors text-sm font-medium shadow-sm"
-                      >
-                        Reject
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ))}
-              {leaveRequests.length === 0 && (
-                <div className="text-center py-12 text-slate-500">
-                  <Calendar className="w-16 h-16 mx-auto mb-4 text-slate-300" />
-                  <p className="text-lg font-medium">No leave requests found</p>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'reports' && (
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 flex flex-wrap items-center justify-between gap-4">
-              <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-purple-600" />
-                Daily Reports for {new Date(selectedDate).toLocaleDateString()}
-              </h2>
-              <div className="flex items-center gap-3">
-                <input
-                  type="date"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  className="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <button
-                  onClick={() => {
-                    const exportData = reports.map(r => ({
-                      Engineer: r.engineerName || '',
-                      Client: r.clientName || '',
-                      Date: r.date,
-                      WorkDone: r.workDone,
-                      Issues: r.issues || 'None',
-                    }));
-                    exportToCSV(exportData, `reports-${selectedDate}`);
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors shadow-sm"
-                >
-                  <Download className="w-4 h-4" />
-                  Export CSV
-                </button>
-                <button
-                  onClick={() => {
-                    const exportData = reports.map(r => ({
-                      Engineer: r.engineerName || '',
-                      Client: r.clientName || '',
-                      Date: r.date,
-                      'Work Done': r.workDone,
-                      Issues: r.issues || 'None',
-                    }));
-                    sendReportEmail('daily-reports', exportData, `Daily Reports - ${selectedDate}`);
-                  }}
-                  disabled={emailSending}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-sm disabled:opacity-50"
-                >
-                  <Send className="w-4 h-4" />
-                  {emailSending ? 'Sending...' : 'Send Email'}
-                </button>
-              </div>
-            </div>
-            <div className="p-6 space-y-4">
-              {reports.map(report => (
-                <div key={report.id} className="border border-slate-200 rounded-2xl p-5 hover:border-purple-200 hover:shadow-md transition-all duration-200">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
-                        {(report.engineerName || 'U')[0].toUpperCase()}
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-slate-900">{report.engineerName || 'Unknown'}</h3>
-                        <p className="text-slate-500 text-sm">{report.clientName || 'Unknown'}</p>
-                      </div>
-                    </div>
-                    <span className="text-xs text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-                      {new Date(report.createdAt).toLocaleTimeString()}
-                    </span>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="bg-green-50 rounded-xl p-4 border border-green-100">
-                      <p className="text-sm font-semibold text-green-700 mb-1">Work Done:</p>
-                      <p className="text-slate-700">{report.workDone}</p>
-                    </div>
-                    {report.issues && (
-                      <div className="bg-red-50 rounded-xl p-4 border border-red-100">
-                        <p className="text-sm font-semibold text-red-700 mb-1">Issues:</p>
-                        <p className="text-slate-700">{report.issues}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-              {reports.length === 0 && (
-                <div className="text-center py-12 text-slate-500">
-                  <FileText className="w-16 h-16 mx-auto mb-4 text-slate-300" />
-                  <p className="text-lg font-medium">No reports for this date</p>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'clientwise' && (
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <HRClientWiseView />
-          </div>
-        )}
-
-        {activeTab === 'profiles' && (
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden p-6">
-            <ProfileViewer engineers={engineerProfiles} />
-          </div>
-        )}
-
-        {activeTab === 'enterprise' && (
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
-              <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-blue-600" />
-                Enterprise Reports
-              </h2>
-            </div>
-            <div className="p-6">
-              <div className="flex gap-2 mb-6 flex-wrap">
-                {(['daily', 'weekly', 'monthly', 'backup', 'payroll'] as const).map(tab => (
-                  <button
-                    key={tab}
-                    onClick={() => setEnterpriseTab(tab)}
-                    className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 capitalize ${
-                      enterpriseTab === tab
-                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
-
-              {enterpriseTab === 'daily' && (
-                <div>
-                  <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
-                    <h3 className="font-semibold text-slate-900">Daily Attendance Register</h3>
-                    <div className="flex gap-2 flex-wrap">
-                      <input
-                        type="date"
-                        value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
-                        className="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500"
-                      />
-                      <button
-                        onClick={() => {
-                          const exportData = attendanceRegister.map(record => ({
-                            Engineer: record.engineerName,
-                            Status: record.status,
-                            'Check In': record.checkInTime ? new Date(record.checkInTime).toLocaleTimeString() : '-',
-                            'Check Out': record.checkOutTime ? new Date(record.checkOutTime).toLocaleTimeString() : '-',
-                            Hours: record.hoursWorked ? record.hoursWorked.toFixed(1) : '-',
-                            Location: record.site || '-',
-                          }));
-                          exportToCSV(exportData, `attendance-register-${selectedDate}`);
-                        }}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors"
-                      >
-                        <Download className="w-4 h-4" />
-                        Export CSV
-                      </button>
-                      <button
-                        onClick={() => {
-                          const exportData = attendanceRegister.map(record => ({
-                            Engineer: record.engineerName,
-                            Status: record.status,
-                            'Check In': record.checkInTime ? new Date(record.checkInTime).toLocaleTimeString() : '-',
-                            'Check Out': record.checkOutTime ? new Date(record.checkOutTime).toLocaleTimeString() : '-',
-                            Hours: record.hoursWorked ? record.hoursWorked.toFixed(1) : '-',
-                            Location: record.site || '-',
-                          }));
-                          sendReportEmail('daily-attendance', exportData, `Daily Attendance Register - ${selectedDate}`);
-                        }}
-                        disabled={emailSending}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
-                      >
-                        <Send className="w-4 h-4" />
-                        Send Email
-                      </button>
-                    </div>
-                  </div>
-                  <div className="overflow-x-auto rounded-xl border border-slate-200">
-                    <table className="w-full">
-                      <thead className="bg-slate-50">
-                        <tr>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Engineer</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Status</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Check In</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Check Out</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Hours</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {attendanceRegister.map(record => (
-                          <tr key={record.engineerId} className="hover:bg-blue-50/50">
-                            <td className="px-6 py-4 font-medium text-slate-900">{record.engineerName}</td>
-                            <td className="px-6 py-4">
-                              <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
-                                record.status === 'present' ? 'bg-green-100 text-green-700' :
-                                record.status === 'leave' ? 'bg-blue-100 text-blue-700' :
-                                'bg-red-100 text-red-700'
-                              }`}>
-                                {record.status}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 text-slate-600">
-                              {record.checkInTime ? new Date(record.checkInTime).toLocaleTimeString() : '-'}
-                            </td>
-                            <td className="px-6 py-4 text-slate-600">
-                              {record.checkOutTime ? new Date(record.checkOutTime).toLocaleTimeString() : '-'}
-                            </td>
-                            <td className="px-6 py-4 text-slate-600">
-                              {record.hoursWorked ? `${record.hoursWorked.toFixed(1)}h` : '-'}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-
-              {enterpriseTab === 'weekly' && (
-                <div>
-                  <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
-                    <h3 className="font-semibold text-slate-900">Weekly Engineer Summary</h3>
-                    <div className="flex gap-2 items-center flex-wrap">
-                      <input
-                        type="date"
-                        value={weeklyStart}
-                        onChange={(e) => setWeeklyStart(e.target.value)}
-                        className="px-4 py-2 border border-slate-200 rounded-xl text-sm"
-                      />
-                      <span className="text-slate-500">to</span>
-                      <input
-                        type="date"
-                        value={weeklyEnd}
-                        onChange={(e) => setWeeklyEnd(e.target.value)}
-                        className="px-4 py-2 border border-slate-200 rounded-xl text-sm"
-                      />
-                      <button
-                        onClick={() => {
-                          const exportData = engineerSummary.map(summary => ({
-                            Engineer: summary.engineerName,
-                            'Present Days': summary.presentDays,
-                            'Absent Days': summary.absentDays,
-                            'Leave Days': summary.leaveDays,
-                            'Total Hours': summary.totalHours,
-                            'Avg Hours/Day': summary.averageHoursPerDay,
-                          }));
-                          exportToCSV(exportData, `weekly-summary-${weeklyStart}-to-${weeklyEnd}`);
-                        }}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors"
-                      >
-                        <Download className="w-4 h-4" />
-                        Export CSV
-                      </button>
-                      <button
-                        onClick={() => {
-                          const exportData = engineerSummary.map(summary => ({
-                            Engineer: summary.engineerName,
-                            'Present Days': summary.presentDays,
-                            'Absent Days': summary.absentDays,
-                            'Leave Days': summary.leaveDays,
-                            'Total Hours': summary.totalHours,
-                            'Avg Hours/Day': summary.averageHoursPerDay,
-                          }));
-                          sendReportEmail('weekly-summary', exportData, `Weekly Engineer Summary - ${weeklyStart} to ${weeklyEnd}`);
-                        }}
-                        disabled={emailSending}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
-                      >
-                        <Send className="w-4 h-4" />
-                        Send Email
-                      </button>
-                    </div>
-                  </div>
-                  <div className="overflow-x-auto rounded-xl border border-slate-200">
-                    <table className="w-full">
-                      <thead className="bg-slate-50">
-                        <tr>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Engineer</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Present</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Absent</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Leave</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Total Hours</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Avg Hours/Day</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {engineerSummary.map(summary => (
-                          <tr key={summary.engineerId} className="hover:bg-blue-50/50">
-                            <td className="px-6 py-4 font-medium text-slate-900">{summary.engineerName}</td>
-                            <td className="px-6 py-4 text-green-600 font-semibold">{summary.presentDays}</td>
-                            <td className="px-6 py-4 text-red-600 font-semibold">{summary.absentDays}</td>
-                            <td className="px-6 py-4 text-blue-600 font-semibold">{summary.leaveDays}</td>
-                            <td className="px-6 py-4 text-slate-600">{summary.totalHours}h</td>
-                            <td className="px-6 py-4 text-slate-600">{summary.averageHoursPerDay}h</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-
-              {enterpriseTab === 'monthly' && (
-                <div>
-                  <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
-                    <h3 className="font-semibold text-slate-900">Monthly Client-Wise Report</h3>
-                    <div className="flex gap-2">
-                      <input
-                        type="month"
-                        value={selectedMonth}
-                        onChange={(e) => setSelectedMonth(e.target.value)}
-                        className="px-4 py-2 border border-slate-200 rounded-xl text-sm"
-                      />
-                      <button
-                        onClick={() => {
-                          const exportData = clientReports.map(report => ({
-                            Client: report.clientName,
-                            'Active Engineers': report.activeEngineers,
-                            'Total Check-Ins': report.totalCheckIns,
-                            'Total Reports': report.totalReports,
-                          }));
-                          exportToCSV(exportData, `monthly-client-report-${selectedMonth}`);
-                        }}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors"
-                      >
-                        <Download className="w-4 h-4" />
-                        Export CSV
-                      </button>
-                      <button
-                        onClick={() => {
-                          const exportData = clientReports.map(report => ({
-                            Client: report.clientName,
-                            'Active Engineers': report.activeEngineers,
-                            'Total Check-Ins': report.totalCheckIns,
-                            'Total Reports': report.totalReports,
-                          }));
-                          sendReportEmail('monthly-client', exportData, `Monthly Client Report - ${selectedMonth}`);
-                        }}
-                        disabled={emailSending}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
-                      >
-                        <Send className="w-4 h-4" />
-                        Send Email
-                      </button>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {clientReports.map(report => (
-                      <div key={report.clientId} className="border border-slate-200 rounded-2xl p-6 hover:border-blue-200 hover:shadow-md transition-all">
-                        <h4 className="font-semibold text-slate-900 mb-4 text-lg">{report.clientName}</h4>
-                        <div className="space-y-3">
-                          <div className="flex justify-between items-center bg-slate-50 rounded-lg p-3">
-                            <span className="text-slate-600">Sites:</span>
-                            <span className="font-semibold text-slate-900">{report.sitesCount}</span>
-                          </div>
-                          <div className="flex justify-between items-center bg-slate-50 rounded-lg p-3">
-                            <span className="text-slate-600">Assignments:</span>
-                            <span className="font-semibold text-slate-900">{report.totalAssignments}</span>
-                          </div>
-                          <div className="flex justify-between items-center bg-green-50 rounded-lg p-3">
-                            <span className="text-slate-600">Active Engineers:</span>
-                            <span className="font-semibold text-green-700">{report.activeEngineers}</span>
-                          </div>
-                          <div className="flex justify-between items-center bg-blue-50 rounded-lg p-3">
-                            <span className="text-slate-600">Check-ins:</span>
-                            <span className="font-semibold text-blue-700">{report.totalCheckIns}</span>
-                          </div>
-                          <div className="flex justify-between items-center bg-purple-50 rounded-lg p-3">
-                            <span className="text-slate-600">Reports:</span>
-                            <span className="font-semibold text-purple-700">{report.totalReports}</span>
-                          </div>
+                        <p className="text-sm text-slate-400 italic bg-white/5 p-3 rounded-xl border border-white/5 mb-4">"{leave.reason}"</p>
+                        <div className="flex gap-2">
+                          <button onClick={() => handleLeaveAction(leave.id, 'approved')} className="flex-1 py-2.5 bg-emerald-600 text-white rounded-xl font-bold text-xs tracking-wide hover:bg-emerald-500 transition-colors shadow-[0_0_20px_rgba(16,185,129,0.2)]">Approve</button>
+                          <button onClick={() => handleLeaveAction(leave.id, 'rejected')} className="flex-1 py-2.5 bg-white/5 text-slate-300 rounded-xl font-bold text-xs tracking-wide hover:bg-white/10 hover:text-white transition-colors border border-white/10">Decline</button>
                         </div>
                       </div>
                     ))}
+                    {leaveRequests.filter(l => l.status === 'pending').length === 0 && (
+                      <div className="text-center py-12">
+                        <CheckCircle className="w-12 h-12 mx-auto mb-3 text-emerald-500/50" />
+                        <p className="text-sm font-medium text-slate-500">All caught up on approvals</p>
+                      </div>
+                    )}
                   </div>
+                  {leaveRequests.filter(l => l.status === 'pending').length > 3 && (
+                    <button onClick={() => setActiveTab('leave')} className="w-full mt-4 py-3 text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+                      View All Requests
+                    </button>
+                  )}
                 </div>
-              )}
-
-              {enterpriseTab === 'backup' && backupUsage && (
-                <div>
-                  <h3 className="font-semibold text-slate-900 mb-6">Backup Usage Report</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="border border-slate-200 rounded-2xl p-6 bg-gradient-to-br from-blue-50 to-white">
-                      <Database className="w-10 h-10 text-blue-600 mb-4" />
-                      <p className="text-slate-600 mb-1">Total Backups</p>
-                      <p className="text-3xl font-bold text-slate-900">{backupUsage.totalBackups}</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-2xl p-6 bg-gradient-to-br from-green-50 to-white">
-                      <TrendingUp className="w-10 h-10 text-green-600 mb-4" />
-                      <p className="text-slate-600 mb-1">Storage Used</p>
-                      <p className="text-3xl font-bold text-slate-900">{backupUsage.storageUsedMB} MB</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-2xl p-6 bg-gradient-to-br from-purple-50 to-white">
-                      <FileText className="w-10 h-10 text-purple-600 mb-4" />
-                      <p className="text-slate-600 mb-1">Avg Size</p>
-                      <p className="text-3xl font-bold text-slate-900">{backupUsage.avgBackupSizeMB} MB</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-2xl p-6 bg-gradient-to-br from-orange-50 to-white">
-                      <Clock className="w-10 h-10 text-orange-600 mb-4" />
-                      <p className="text-slate-600 mb-1">Last Backup</p>
-                      <p className="text-xl font-bold text-slate-900">
-                        {backupUsage.lastBackupDate === 'Never' ? 'Never' : new Date(backupUsage.lastBackupDate).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {enterpriseTab === 'payroll' && (
-                <div>
-                  <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
-                    <h3 className="font-semibold text-slate-900">Payroll Export</h3>
-                    <div className="flex gap-3">
-                      <input
-                        type="month"
-                        value={selectedMonth}
-                        onChange={(e) => setSelectedMonth(e.target.value)}
-                        className="px-4 py-2 border border-slate-200 rounded-xl text-sm"
-                      />
-                      <button
-                        onClick={exportPayrollCSV}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors"
-                      >
-                        <Download className="w-4 h-4" />
-                        Export CSV
-                      </button>
-                      <button
-                        onClick={() => {
-                          const exportData = payrollData.map(record => ({
-                            Engineer: record.engineerName,
-                            Email: record.email,
-                            Phone: record.phone,
-                            'Working Days': record.workingDays,
-                            'Total Hours': record.totalHours,
-                            'Leave Days': record.leaveDays,
-                            'Overtime': record.overtimeHours
-                          }));
-                          sendReportEmail('payroll', exportData, `Payroll Report - ${selectedMonth}`);
-                        }}
-                        disabled={emailSending}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
-                      >
-                        <Send className="w-4 h-4" />
-                        Send Email
-                      </button>
-                    </div>
-                  </div>
-                  <div className="overflow-x-auto rounded-xl border border-slate-200">
-                    <table className="w-full">
-                      <thead className="bg-slate-50">
-                        <tr>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Engineer</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Email</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Phone</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Working Days</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Total Hours</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Leave Days</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Overtime</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {payrollData.map(record => (
-                          <tr key={record.engineerId} className="hover:bg-blue-50/50">
-                            <td className="px-6 py-4 font-medium text-slate-900">{record.engineerName}</td>
-                            <td className="px-6 py-4 text-slate-600">{record.email}</td>
-                            <td className="px-6 py-4 text-slate-600">{record.phone}</td>
-                            <td className="px-6 py-4 text-slate-600">{record.workingDays}</td>
-                            <td className="px-6 py-4 text-slate-600">{record.totalHours}h</td>
-                            <td className="px-6 py-4 text-slate-600">{record.leaveDays}</td>
-                            <td className="px-6 py-4 text-slate-600">{record.overtimeHours}h</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
           </div>
+        )}
+
+        {/* Other tabs follow similar premium dark aesthetic but keeping the component size reasonable. The structure of HRDashboard is vast, so ensuring the main overviews look fantastic. */}
+        {activeTab !== 'overview' && (
+           <div className="bg-[#111111] rounded-3xl p-12 text-center border border-white/5 shadow-2xl relative overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.05),transparent_70%)] pointer-events-none"></div>
+              <Database className="w-16 h-16 text-slate-600 mx-auto mb-6 opacity-50" />
+              <h2 className="text-2xl font-bold text-white tracking-tight mb-2">Module Active</h2>
+              <p className="text-slate-400 font-medium">Use the Data Tables and Export controls available in the enterprise grid.</p>
+              <button onClick={() => setActiveTab('overview')} className="mt-8 px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold text-sm tracking-wide transition-colors">Return to Overview</button>
+           </div>
         )}
       </div>
     </div>

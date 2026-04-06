@@ -93,132 +93,146 @@ export default function ClientDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+      <div className="min-h-[100dvh] bg-[#0A0A0A] flex items-center justify-center">
+        <div className="relative w-16 h-16 mx-auto mb-5">
+          <div className="absolute inset-0 rounded-full border-[2px] border-amber-500/10"></div>
+          <div className="absolute inset-0 rounded-full border-[2px] border-transparent border-t-amber-500 animate-spin"></div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f0f2f5]">
+    <div className="min-h-[100dvh] bg-[#0A0A0A] text-slate-200">
       {/* ─── Premium Dark Header ─── */}
-      <div className="relative overflow-hidden bg-[#0f172a]">
-        <div className="absolute inset-0 bg-gradient-to-r from-amber-600/10 via-transparent to-orange-600/10"></div>
-        <div className="absolute -top-32 -right-32 w-96 h-96 bg-amber-500/[0.06] rounded-full blur-[120px]"></div>
+      <div className="relative overflow-hidden bg-[#111111] border-b border-white/5">
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-600/10 via-transparent to-orange-600/5"></div>
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-        <div className="relative max-w-7xl mx-auto px-6 py-8">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-white/[0.06] border border-white/[0.08] rounded-2xl backdrop-blur-sm">
-                <Building2 className="w-8 h-8 text-amber-400" />
-              </div>
-              <div>
-                <p className="text-amber-400/50 text-[10px] font-bold uppercase tracking-[0.3em] mb-1.5">{client ? client.name : 'Client Portal'}</p>
-                <h1 className="text-3xl font-extrabold text-white tracking-tight">Client Dashboard</h1>
-                <p className="text-slate-400 text-sm font-medium mt-1">Project oversight & workforce analytics</p>
-              </div>
+        <div className="relative max-w-7xl mx-auto px-8 py-10">
+          <div className="flex items-start gap-5 mb-2">
+            <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl">
+              <Building2 className="w-8 h-8 text-amber-400" />
             </div>
-            
-            <div className="flex gap-2 bg-white/[0.04] p-1.5 rounded-2xl border border-white/[0.08]">
-               {[
-                 { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-                 { id: 'reports', label: 'Work Reports', icon: FileText },
-                 { id: 'enterprise', label: 'Enterprise', icon: TrendingUp },
-                 { id: 'muster', label: 'Muster Roll', icon: Calendar }
-               ].map(t => (
-                 <button 
-                   key={t.id} 
-                   onClick={() => setActiveTab(t.id as any)}
-                   className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] tracking-wide transition-all ${
-                     activeTab === t.id ? 'bg-white text-slate-900 shadow-lg' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.06]'
-                   }`}
-                 >
-                   <t.icon className="w-4 h-4" />
-                   {t.label}
-                 </button>
-               ))}
+            <div>
+              <p className="text-amber-400/60 text-[10px] font-bold uppercase tracking-[0.3em] mb-1.5">{client ? client.name : 'Client Portal'}</p>
+              <h1 className="text-3xl font-extrabold text-white tracking-tight">Client Dashboard</h1>
+              <p className="text-slate-400 text-sm font-medium mt-2">Project oversight & workforce analytics</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-8 py-8 -mt-8 relative z-10">
+        <div className="flex p-1 bg-[#1A1A1A]/80 backdrop-blur-xl rounded-2xl border border-white/5 w-full overflow-x-auto scrollbar-hide shadow-2xl mb-8">
+           {[
+             { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+             { id: 'reports', label: 'Work Reports', icon: FileText },
+             { id: 'enterprise', label: 'Enterprise', icon: TrendingUp },
+             { id: 'muster', label: 'Muster Roll', icon: Calendar }
+           ].map(t => (
+             <button 
+               key={t.id} 
+               onClick={() => setActiveTab(t.id as any)}
+               className={`flex items-center gap-2 px-5 py-3.5 rounded-xl font-bold text-xs tracking-wide whitespace-nowrap transition-all ${
+                 activeTab === t.id 
+                   ? 'bg-white/10 text-white shadow-lg border border-white/10' 
+                   : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+               }`}
+             >
+               <t.icon className="w-4 h-4" />
+               {t.label}
+             </button>
+           ))}
+        </div>
+
         {activeTab === 'overview' && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 hover:shadow-lg transition-all cursor-pointer active:scale-95 duration-300" onClick={() => setActiveTab('enterprise')}>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <Users className="w-5 h-5 text-blue-600" />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+            <div className="bg-[#111111] rounded-3xl p-6 shadow-2xl border border-white/5 hover:bg-white/5 transition-all cursor-pointer group relative overflow-hidden" onClick={() => setActiveTab('enterprise')}>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-[50px] -mr-16 -mt-16 pointer-events-none"></div>
+              <div className="flex items-center justify-between mb-4 relative z-10">
+                <div className="p-3 bg-blue-500/10 rounded-xl border border-blue-500/20">
+                  <Users className="w-5 h-5 text-blue-400" />
                 </div>
-                <h3 className="font-semibold text-slate-700">Assigned Engineers</h3>
               </div>
-              <p className="text-3xl font-extrabold text-slate-900">{assignments.length}</p>
-              <p className="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Active assignments</p>
+              <div className="relative z-10">
+                <p className="text-3xl font-extrabold text-white tracking-tight">{assignments.length}</p>
+                <p className="text-xs font-bold text-slate-400 mt-2 uppercase tracking-widest">Assigned Engineers</p>
+              </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 hover:shadow-lg transition-all cursor-pointer active:scale-95 duration-300" onClick={() => setActiveTab('reports')}>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <FileText className="w-5 h-5 text-green-600" />
+            <div className="bg-[#111111] rounded-3xl p-6 shadow-2xl border border-white/5 hover:bg-white/5 transition-all cursor-pointer group relative overflow-hidden" onClick={() => setActiveTab('reports')}>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-[50px] -mr-16 -mt-16 pointer-events-none"></div>
+              <div className="flex items-center justify-between mb-4 relative z-10">
+                <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                  <FileText className="w-5 h-5 text-emerald-400" />
                 </div>
-                <h3 className="font-semibold text-slate-700">Today's Reports</h3>
               </div>
-              <p className="text-3xl font-extrabold text-slate-900">{reports.length}</p>
-              <p className="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Work reports submitted</p>
+              <div className="relative z-10">
+                <p className="text-3xl font-extrabold text-white tracking-tight">{reports.length}</p>
+                <p className="text-xs font-bold text-slate-400 mt-2 uppercase tracking-widest">Today's Reports</p>
+              </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 hover:shadow-lg transition-all cursor-pointer active:scale-95 duration-300" onClick={() => setActiveTab('muster')}>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <MapPin className="w-5 h-5 text-purple-600" />
+            <div className="bg-[#111111] rounded-3xl p-6 shadow-2xl border border-white/5 hover:bg-white/5 transition-all cursor-pointer group relative overflow-hidden" onClick={() => setActiveTab('muster')}>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-[50px] -mr-16 -mt-16 pointer-events-none"></div>
+              <div className="flex items-center justify-between mb-4 relative z-10">
+                <div className="p-3 bg-purple-500/10 rounded-xl border border-purple-500/20">
+                  <MapPin className="w-5 h-5 text-purple-400" />
                 </div>
-                <h3 className="font-semibold text-slate-700">Check-ins Today</h3>
               </div>
-              <p className="text-3xl font-extrabold text-slate-900">{checkIns.length}</p>
-              <p className="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Engineers checked in</p>
+              <div className="relative z-10">
+                <p className="text-3xl font-extrabold text-white tracking-tight">{checkIns.length}</p>
+                <p className="text-xs font-bold text-slate-400 mt-2 uppercase tracking-widest">Check-ins Today</p>
+              </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 hover:shadow-lg transition-all cursor-pointer active:scale-95 duration-300" onClick={() => setActiveTab('muster')}>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-orange-100 rounded-lg">
-                  <TrendingUp className="w-5 h-5 text-orange-600" />
+            <div className="bg-[#111111] rounded-3xl p-6 shadow-2xl border border-white/5 hover:bg-white/5 transition-all cursor-pointer group relative overflow-hidden" onClick={() => setActiveTab('muster')}>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-[50px] -mr-16 -mt-16 pointer-events-none"></div>
+              <div className="flex items-center justify-between mb-4 relative z-10">
+                <div className="p-3 bg-orange-500/10 rounded-xl border border-orange-500/20">
+                  <TrendingUp className="w-5 h-5 text-orange-400" />
                 </div>
-                <h3 className="font-semibold text-slate-700">On Leave</h3>
               </div>
-              <p className="text-3xl font-extrabold text-slate-900">
-                {assignments.filter(a => isEngineerOnLeave(a.engineerId)).length}
-              </p>
-              <p className="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Engineers on leave</p>
+              <div className="relative z-10">
+                <p className="text-3xl font-extrabold text-white tracking-tight">
+                  {assignments.filter(a => isEngineerOnLeave(a.engineerId)).length}
+                </p>
+                <p className="text-xs font-bold text-slate-400 mt-2 uppercase tracking-widest">On Leave</p>
+              </div>
             </div>
           </div>
         )}
 
         {activeTab === 'overview' && (
-          <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white rounded-xl p-4 shadow-sm border border-slate-200 text-slate-900 font-bold uppercase text-xs">
+          <div className="mb-8 bg-[#111111] rounded-2xl p-5 shadow-2xl border border-white/5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative overflow-hidden">
             <div className="flex items-center gap-3">
-              <Calendar className="w-5 h-5 text-orange-600" />
-              <h2 className="text-xl font-black">Date View</h2>
+              <Calendar className="w-5 h-5 text-amber-400" />
+              <h2 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Date Selection</h2>
             </div>
             <input
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none"
+              className="px-4 py-2.5 bg-black/50 border border-white/10 rounded-xl focus:ring-2 focus:ring-amber-500/50 outline-none transition-all text-sm font-medium text-white color-scheme-dark"
             />
           </div>
         )}
 
         <div className="grid gap-6 mb-8">
           {activeTab === 'overview' && (
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-50 to-blue-100 px-6 py-4 border-b border-slate-200">
-                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2 uppercase tracking-tighter">
-                  <Users className="w-5 h-5 text-blue-600" />
+            <div className="bg-[#111111] rounded-3xl shadow-2xl border border-white/5 overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-[80px] pointer-events-none"></div>
+              <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between relative z-10">
+                <h3 className="font-bold text-white tracking-tight flex items-center gap-3">
+                  <div className="p-2 bg-blue-500/10 rounded-lg border border-blue-500/20">
+                    <Users className="w-4 h-4 text-blue-400" />
+                  </div>
                   Assigned Engineers
                 </h3>
               </div>
-              <div className="p-6">
-                <div className="grid gap-4">
+              <div className="p-6 relative z-10">
+                <div className="grid gap-4 md:grid-cols-2">
                   {assignments.length > 0 ? assignments.map(assignment => {
                     const engineer = getEngineerById(assignment.engineerId);
                     const site = assignment.siteId ? getSiteById(assignment.siteId) : null;
@@ -226,31 +240,31 @@ export default function ClientDashboard() {
                     const backupEngineer = leave?.backupEngineerId ? getEngineerById(leave.backupEngineerId) : null;
 
                     return (
-                      <div key={assignment.id} className="border border-slate-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-md transition-all bg-gradient-to-r from-white to-slate-50">
+                      <div key={assignment.id} className="border border-white/5 rounded-2xl p-5 hover:bg-white/5 transition-all bg-black/40 group">
                         <div className="flex justify-between items-start">
                           <div>
-                            <h4 className="font-semibold text-slate-900">{engineer?.name || 'Unknown Engineer'}</h4>
-                            <p className="text-sm text-slate-600">{engineer?.email}</p>
+                            <h4 className="font-bold text-white">{engineer?.name || 'Unknown Engineer'}</h4>
+                            <p className="text-xs font-medium text-slate-500 mt-1">{engineer?.email}</p>
                             {site && (
-                              <p className="text-sm text-slate-600 mt-1 flex items-center gap-1">
-                                <MapPin className="w-3 h-3" />
-                                Site: {site.name}
-                              </p>
+                              <div className="inline-flex items-center gap-1 mt-3 px-2.5 py-1 bg-white/5 rounded border border-white/5">
+                                <MapPin className="w-3 h-3 text-slate-400" />
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{site.name}</span>
+                              </div>
                             )}
                           </div>
                           {leave ? (
                             <div className="text-right">
-                              <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">
+                              <span className="px-2.5 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-lg text-[10px] font-bold uppercase tracking-widest">
                                 On Leave
                               </span>
                               {backupEngineer && (
-                                <p className="text-sm text-slate-600 mt-2">
+                                <p className="text-[10px] text-slate-500 mt-2 uppercase tracking-widest">
                                   Backup: {backupEngineer.name}
                                 </p>
                               )}
                             </div>
                           ) : (
-                            <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                            <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg text-[10px] font-bold uppercase tracking-widest">
                               Active
                             </span>
                           )}
@@ -258,7 +272,7 @@ export default function ClientDashboard() {
                       </div>
                     );
                   }) : (
-                    <p className="text-center py-8 text-slate-500">No engineers assigned yet</p>
+                    <p className="col-span-full text-center py-8 text-slate-500 font-medium">No engineers assigned yet</p>
                   )}
                 </div>
               </div>
@@ -266,40 +280,45 @@ export default function ClientDashboard() {
           )}
 
           {activeTab === 'enterprise' && (
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-purple-50 to-purple-100 px-6 py-4 border-b border-slate-200">
-                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2 uppercase tracking-tighter">
-                  <Clock className="w-5 h-5 text-purple-600" />
+            <div className="bg-[#111111] rounded-3xl shadow-2xl border border-white/5 overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-[80px] pointer-events-none"></div>
+              <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between relative z-10">
+                <h3 className="font-bold text-white tracking-tight flex items-center gap-3">
+                  <div className="p-2 bg-purple-500/10 rounded-lg border border-purple-500/20">
+                    <Clock className="w-4 h-4 text-purple-400" />
+                  </div>
                   Attendance Insights
                 </h3>
               </div>
-              <div className="p-6 space-y-4">
+              <div className="p-6 space-y-4 relative z-10">
                 {checkIns.length > 0 ? checkIns.map(checkIn => {
                   const engineer = getEngineerById(checkIn.engineerId);
                   return (
-                    <div key={checkIn.id} className="border border-slate-200 rounded-xl p-4 hover:border-purple-300 hover:shadow-md transition-all bg-gradient-to-r from-white to-slate-50">
+                    <div key={checkIn.id} className="border border-white/5 rounded-2xl p-5 hover:bg-white/5 transition-all bg-black/40">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h4 className="font-semibold text-slate-900">{engineer?.name || 'Unknown Engineer'}</h4>
-                          <p className="text-sm text-slate-600 mt-1 flex items-center gap-2">
-                            <Clock className="w-3 h-3" />
-                            Check-in: {new Date(checkIn.checkInTime).toLocaleTimeString()}
-                          </p>
-                          {checkIn.checkOutTime && (
-                            <p className="text-sm text-slate-600 flex items-center gap-2">
+                          <h4 className="font-bold text-white">{engineer?.name || 'Unknown Engineer'}</h4>
+                          <div className="flex flex-wrap gap-3 mt-3">
+                            <p className="text-xs text-slate-400 flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
                               <Clock className="w-3 h-3" />
-                              Check-out: {new Date(checkIn.checkOutTime).toLocaleTimeString()}
+                              IN: {new Date(checkIn.checkInTime).toLocaleTimeString()}
                             </p>
-                          )}
+                            {checkIn.checkOutTime && (
+                              <p className="text-xs text-slate-400 flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
+                                <Clock className="w-3 h-3" />
+                                OUT: {new Date(checkIn.checkOutTime).toLocaleTimeString()}
+                              </p>
+                            )}
+                          </div>
                         </div>
                         {checkIn.latitude && checkIn.longitude && (
                           <a
                             href={`https://www.google.com/maps?q=${checkIn.latitude},${checkIn.longitude}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-bold bg-blue-50 px-4 py-2 rounded-xl transition-all active:scale-95"
+                            className="flex items-center gap-1.5 text-purple-400 hover:text-purple-300 bg-purple-500/10 border border-purple-500/20 text-[10px] font-bold uppercase tracking-widest px-3 py-2 rounded-xl transition-all active:scale-95"
                           >
-                            <MapPin className="w-4 h-4" />
+                            <MapPin className="w-3.5 h-3.5" />
                             View Site
                           </a>
                         )}
@@ -307,17 +326,20 @@ export default function ClientDashboard() {
                     </div>
                   );
                 }) : (
-                  <p className="text-center py-8 text-slate-500">No check-ins available</p>
+                  <p className="text-center py-8 text-slate-500 font-medium">No check-ins available</p>
                 )}
               </div>
             </div>
           )}
 
           {activeTab === 'reports' && (
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-green-50 to-green-100 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
-                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2 uppercase tracking-tighter">
-                  <FileText className="w-5 h-5 text-green-600" />
+            <div className="bg-[#111111] rounded-3xl shadow-2xl border border-white/5 overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-[80px] pointer-events-none"></div>
+              <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between relative z-10">
+                <h3 className="font-bold text-white tracking-tight flex items-center gap-3">
+                  <div className="p-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                    <FileText className="w-4 h-4 text-emerald-400" />
+                  </div>
                   Work Reports
                 </h3>
                 <button
@@ -335,46 +357,48 @@ export default function ClientDashboard() {
                     });
                     exportToCSV(exportData, `reports-${client?.name || 'client'}-${selectedDate}`);
                   }}
-                  className="px-6 py-2.5 bg-green-600 text-white rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-green-500/20 active:scale-95 transition-all"
+                  className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold text-xs tracking-wide shadow-[0_0_20px_rgba(16,185,129,0.2)] active:scale-95 transition-all"
                 >
                   <Download className="w-4 h-4" />
                   Export All
                 </button>
               </div>
-              <div className="p-6 space-y-4">
+              <div className="p-6 space-y-4 relative z-10">
                 {reports.length > 0 ? reports.map(report => {
                   const engineer = getEngineerById(report.engineerId);
                   const site = report.siteId ? getSiteById(report.siteId) : null;
                   return (
-                    <div key={report.id} className="border border-slate-200 rounded-2xl p-6 hover:border-green-300 hover:shadow-xl transition-all duration-300 bg-white">
+                    <div key={report.id} className="border border-white/5 rounded-2xl p-6 hover:bg-white/5 transition-all bg-black/40">
                       <div className="flex justify-between items-start mb-4">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center font-black text-slate-400 border border-slate-100">{engineer?.name?.charAt(0)}</div>
+                          <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center font-black text-slate-400 border border-white/10">
+                            {engineer?.name?.charAt(0)}
+                          </div>
                           <div>
-                            <h4 className="font-black text-slate-800 uppercase leading-none">{engineer?.name || 'Staff'}</h4>
-                            {site && <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{site.name}</p>}
+                            <h4 className="font-bold text-white leading-none">{engineer?.name || 'Staff'}</h4>
+                            {site && <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">{site.name}</p>}
                           </div>
                         </div>
-                        <span className="text-[10px] font-black text-slate-400 uppercase bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase bg-white/5 px-2.5 py-1 rounded border border-white/5">
                           {new Date(report.createdAt).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}
                         </span>
                       </div>
                       <div className="space-y-4">
-                        <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/50">
-                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Scope of Work</p>
-                          <p className="text-sm text-slate-600 leading-relaxed italic">"{report.workDone}"</p>
+                        <div className="bg-black/50 rounded-xl p-4 border border-white/5">
+                          <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-2">Scope of Work</p>
+                          <p className="text-sm text-slate-300 leading-relaxed italic">"{report.workDone}"</p>
                         </div>
                         {report.issues && (
-                          <div className="bg-red-50 rounded-2xl p-4 border border-red-100">
-                            <p className="text-[9px] font-black text-red-400 uppercase tracking-[0.2em] mb-2">Detected Blockers</p>
-                            <p className="text-sm text-red-600 font-bold leading-relaxed">"{report.issues}"</p>
+                          <div className="bg-red-500/5 rounded-xl p-4 border border-red-500/10">
+                            <p className="text-[9px] font-bold text-red-400/70 uppercase tracking-[0.2em] mb-2">Detected Blockers</p>
+                            <p className="text-sm text-red-400 font-bold leading-relaxed">"{report.issues}"</p>
                           </div>
                         )}
                       </div>
                     </div>
                   );
                 }) : (
-                  <p className="text-center py-12 text-slate-400 font-black uppercase italic">No status reports found for this interval</p>
+                  <p className="text-center py-12 text-slate-500 font-bold uppercase tracking-widest text-[10px]">No status reports found for this interval</p>
                 )}
               </div>
             </div>

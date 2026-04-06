@@ -21,17 +21,26 @@ function AppContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600">Loading your profile...</p>
+      <div className="min-h-[100dvh] bg-[#0A0A0A] flex flex-col items-center justify-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.05),transparent_50%)]"></div>
+        <div className="w-12 h-12 relative z-10">
+          <div className="absolute inset-0 border-2 border-slate-800 rounded-full"></div>
+          <div className="absolute inset-0 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
         </div>
+        <p className="text-slate-400 mt-6 text-sm font-medium tracking-widest uppercase z-10">Authenticating</p>
       </div>
     );
   }
 
   if (!user) {
-    return <div className="p-8 text-center text-red-600">Please log in through the main portal.</div>;
+    return (
+      <div className="min-h-[100dvh] bg-[#0A0A0A] flex items-center justify-center p-6">
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-8 max-w-sm w-full text-center backdrop-blur-xl">
+          <p className="text-white text-lg font-medium">Session Expired</p>
+          <p className="text-slate-400 mt-2 text-sm">Please log in through the main portal to continue.</p>
+        </div>
+      </div>
+    );
   }
 
   const roleStr = Array.isArray(user.role) ? user.role.join(',') : String(user.role || '');
@@ -39,10 +48,8 @@ function AppContent() {
 
   const isRohanOrShivam = user.email.toLowerCase() === 'rohan@cybaemtech.com' || user.email.toLowerCase() === 'shivam.jagtap@cybaemtech.com';
 
-  // For privileged users with multiple roles, override their effective role based on their custom toggle
   const effectiveRole = (isRohanOrShivam ? multiRoleViewMode : normalizedRole) || '';
 
-  // Unified routing variables
   const isHR = effectiveRole.includes('hr');
   const isAdmin = effectiveRole.includes('admin');
   const isClient = effectiveRole.includes('client');
@@ -50,7 +57,6 @@ function AppContent() {
   const isPrivileged = isHR || isAdmin;
 
   const renderDashboard = () => {
-    // If mobile view is active
     if (viewMode === 'mobile') {
         if (isAdmin)      return <MobileAdminDashboard />;
         if (isEngineer)   return <MobileEngineerDashboard />;
@@ -58,66 +64,39 @@ function AppContent() {
         if (isClient)     return <MobileClientDashboard />;
     }
 
-    // Default Web Dashboards (Source of Truth)
     if (isAdmin) return <AdminDashboard />;
     if (isEngineer) return <EngineerDashboard />;
     if (isHR) return <HRDashboard />;
     if (isClient) return <ClientDashboard />;
     
-    // Default fallback
     return <EngineerDashboard />;
   };
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-[100dvh] bg-[#0A0A0A] text-slate-200 selection:bg-white/20 selection:text-white relative flex flex-col font-sans antialiased">
       <Header
         currentRole={user.role}
         userName={user.name || 'User'}
         onProfileClick={() => setShowProfile(true)}
       />
 
-      {/* View toggle: visible for engineers, admins, and HR */}
       {(isEngineer || isPrivileged || isClient) && (
-        <div className="fixed bottom-6 right-6 z-50">
-          <div className="bg-white rounded-full shadow-lg border border-slate-200 p-2 flex gap-2">
-            <button
-              onClick={() => setViewMode('web')}
-              className={`p-3 rounded-full transition-all ${
-                viewMode === 'web'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-slate-600 hover:bg-slate-100'
-              }`}
-              title="Web View"
-            >
-              <Monitor className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setViewMode('mobile')}
-              className={`p-3 rounded-full transition-all ${
-                viewMode === 'mobile'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-slate-600 hover:bg-slate-100'
-              }`}
-              title="Mobile View"
-            >
-              <Smartphone className="w-5 h-5" />
-            </button>
-          </div>
+        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
           {isRohanOrShivam && (
-            <div className="bg-white mt-3 rounded-full shadow-lg border border-slate-200 p-2 flex flex-col gap-2">
+            <div className="bg-[#1A1A1A]/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 p-2 flex flex-col gap-2 w-40 transform origin-bottom-right transition-all">
               <div className="flex gap-2">
                 <button
                   onClick={() => setMultiRoleViewMode('admin')}
-                  className={`flex-1 py-1.5 px-3 rounded-full text-[10px] font-black uppercase transition-all ${
-                    multiRoleViewMode === 'admin' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'
+                  className={`flex-1 py-2 px-3 rounded-xl text-[10px] font-bold tracking-wider uppercase transition-all ${
+                    multiRoleViewMode === 'admin' ? 'bg-white text-black shadow-md' : 'text-slate-400 hover:text-white hover:bg-white/5'
                   }`}
                 >
                   Admin
                 </button>
                 <button
                   onClick={() => setMultiRoleViewMode('hr')}
-                  className={`flex-1 py-1.5 px-3 rounded-full text-[10px] font-black uppercase transition-all ${
-                    multiRoleViewMode === 'hr' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'
+                  className={`flex-1 py-2 px-3 rounded-xl text-[10px] font-bold tracking-wider uppercase transition-all ${
+                    multiRoleViewMode === 'hr' ? 'bg-white text-black shadow-md' : 'text-slate-400 hover:text-white hover:bg-white/5'
                   }`}
                 >
                   HR
@@ -125,20 +104,46 @@ function AppContent() {
               </div>
               <button
                 onClick={() => setMultiRoleViewMode('engineer')}
-                className={`w-full py-1.5 px-3 rounded-full text-[10px] font-black uppercase transition-all ${
-                  multiRoleViewMode === 'engineer' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'
+                className={`w-full py-2 px-3 rounded-xl text-[10px] font-bold tracking-wider uppercase transition-all ${
+                  multiRoleViewMode === 'engineer' ? 'bg-white text-black shadow-md' : 'text-slate-400 hover:text-white hover:bg-white/5'
                 }`}
               >
                 Engineer
               </button>
             </div>
           )}
+          
+          <div className="bg-[#1A1A1A]/90 backdrop-blur-xl rounded-full shadow-2xl border border-white/10 p-1.5 flex gap-1 items-center">
+            <button
+              onClick={() => setViewMode('web')}
+              className={`p-3 rounded-full transition-all duration-300 ${
+                viewMode === 'web'
+                  ? 'bg-white text-black shadow-lg scale-100'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5 scale-95'
+              }`}
+              title="Desktop View"
+            >
+              <Monitor className="w-4 h-4" />
+            </button>
+            <div className="w-[1px] h-4 bg-white/10 mx-1"></div>
+            <button
+              onClick={() => setViewMode('mobile')}
+              className={`p-3 rounded-full transition-all duration-300 ${
+                viewMode === 'mobile'
+                  ? 'bg-white text-black shadow-lg scale-100'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5 scale-95'
+              }`}
+              title="Mobile View"
+            >
+              <Smartphone className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
 
-      <main className="min-h-[calc(100vh-4rem)]">
+      <main className="flex-1 w-full flex flex-col relative z-0">
         {showProfile ? (
-          <div className="p-6">
+          <div className="p-6 md:p-12 w-full max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
             <ProfileEditor onClose={() => setShowProfile(false)} />
           </div>
         ) : (

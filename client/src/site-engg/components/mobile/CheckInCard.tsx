@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, CheckCircle, Loader, AlertCircle, ExternalLink, LogOut, Navigation } from 'lucide-react';
+import { MapPin, CheckCircle, Loader2, AlertTriangle, ExternalLink, LogOut, Navigation } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { checkInService } from '../../services/checkInService';
 import type { CheckIn } from '../../types';
@@ -118,48 +118,48 @@ export default function CheckInCard({ checkIn, onCheckInComplete, onCheckOutComp
   if (checkIn) {
     const isComplete = !!checkIn.checkOutTime;
     return (
-      <div className={`relative overflow-hidden rounded-3xl border shadow-lg ${isComplete ? 'bg-gradient-to-br from-slate-50 to-slate-100 border-slate-200' : 'bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200/60'}`}>
-        <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl -mr-16 -mt-16 ${isComplete ? 'bg-slate-200/50' : 'bg-emerald-200/50'}`} />
+      <div className={`relative overflow-hidden rounded-3xl border shadow-2xl ${isComplete ? 'bg-[#1A1A1A] border-white/10' : 'bg-[#111827] border-blue-500/30'}`}>
+        {!isComplete && <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(37,99,235,0.15),transparent_70%)] pointer-events-none"></div>}
         <div className="relative p-6">
-          <div className="flex items-start gap-4 mb-5">
-            <div className={`p-3 rounded-2xl shadow-lg ${isComplete ? 'bg-slate-500 shadow-slate-200' : 'bg-gradient-to-br from-emerald-500 to-teal-600 shadow-emerald-200'}`}>
-              <CheckCircle className="w-6 h-6 text-white" />
+          <div className="flex items-start gap-4 mb-6">
+            <div className={`p-3 rounded-2xl shadow-xl ${isComplete ? 'bg-white/10 text-slate-400' : 'bg-blue-600 text-white'}`}>
+              <CheckCircle className="w-6 h-6" />
             </div>
             <div className="flex-1">
-              <h3 className={`font-bold text-lg ${isComplete ? 'text-slate-800' : 'text-emerald-900'}`}>
+              <h3 className={`font-bold text-lg tracking-tight ${isComplete ? 'text-white' : 'text-blue-400'}`}>
                 {isComplete ? 'Session Complete' : 'On Duty'}
               </h3>
-              <p className={`text-sm font-semibold mt-0.5 ${isComplete ? 'text-slate-500' : 'text-emerald-700/80'}`}>
+              <p className={`text-xs font-medium mt-1 ${isComplete ? 'text-slate-500' : 'text-blue-200/60'}`}>
                 In: {new Date(checkIn.checkInTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                 {checkIn.checkOutTime && ` — Out: ${new Date(checkIn.checkOutTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`}
               </p>
             </div>
             {!isComplete && (
-              <div className="flex items-center gap-1.5">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-500/10 rounded-full border border-blue-500/20">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                 </span>
-                <span className="text-[10px] font-black text-emerald-600 uppercase tracking-wider">Live</span>
+                <span className="text-[9px] font-bold text-blue-400 uppercase tracking-widest">Live</span>
               </div>
             )}
           </div>
 
           {checkIn.locationName && (
-            <div className={`p-3.5 rounded-2xl border mb-4 ${isComplete ? 'bg-white border-slate-200' : 'bg-white/60 backdrop-blur-sm border-emerald-200/40'}`}>
-              <div className="flex items-start gap-2.5">
-                <MapPin className={`w-4 h-4 flex-shrink-0 mt-0.5 ${isComplete ? 'text-slate-500' : 'text-emerald-600'}`} />
+            <div className={`p-4 rounded-2xl mb-6 border ${isComplete ? 'bg-black/50 border-white/5' : 'bg-black/40 border-blue-500/10'}`}>
+              <div className="flex items-start gap-3">
+                <MapPin className={`w-4 h-4 flex-shrink-0 mt-0.5 ${isComplete ? 'text-slate-500' : 'text-blue-400'}`} />
                 <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Location</p>
-                  <p className="text-xs text-slate-700 leading-relaxed truncate">{checkIn.locationName}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Location</p>
+                  <p className="text-xs text-slate-300 leading-relaxed truncate">{checkIn.locationName}</p>
                   {checkIn.latitude && checkIn.longitude && (
                     <a
                       href={`https://www.google.com/maps?q=${checkIn.latitude},${checkIn.longitude}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 mt-2 hover:text-blue-800 transition-colors"
+                      className="inline-flex items-center gap-1.5 text-[10px] font-bold text-blue-400 mt-3 hover:text-blue-300 transition-colors uppercase tracking-wider"
                     >
-                      <ExternalLink className="w-3 h-3" /> Open Maps
+                      <ExternalLink className="w-3 h-3" /> View Maps
                     </a>
                   )}
                 </div>
@@ -167,24 +167,23 @@ export default function CheckInCard({ checkIn, onCheckInComplete, onCheckOutComp
             </div>
           )}
 
-          {/* Check Out Button */}
           {!isComplete && (
             <button
               onClick={handleCheckOut}
               disabled={checkingOut}
-              className="w-full py-4 bg-gradient-to-r from-rose-600 to-red-600 text-white rounded-2xl font-bold hover:shadow-xl hover:shadow-red-300/30 transition-all flex items-center justify-center gap-3 active:scale-[0.97] disabled:opacity-50"
+              className="w-full py-4 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-2xl font-bold transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50 tracking-wide text-sm"
             >
               {checkingOut ? (
-                <><Loader className="w-5 h-5 animate-spin" /> Checking Out...</>
+                <><Loader2 className="w-5 h-5 animate-spin" /> Closing Session...</>
               ) : (
                 <><LogOut className="w-5 h-5" /> Check Out</>
               )}
             </button>
           )}
           {error && (
-            <div className="flex items-start gap-2 mt-3 p-3 bg-red-50 rounded-xl border border-red-100">
-              <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
-              <p className="text-xs font-medium text-red-700">{error}</p>
+            <div className="flex items-start gap-2 mt-4 p-3 bg-red-500/10 rounded-xl border border-red-500/20">
+              <AlertTriangle className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />
+              <p className="text-xs font-medium text-red-400/90">{error}</p>
             </div>
           )}
         </div>
@@ -193,40 +192,37 @@ export default function CheckInCard({ checkIn, onCheckInComplete, onCheckOutComp
   }
 
   return (
-    <div className="relative overflow-hidden bg-white rounded-3xl shadow-lg border border-slate-200">
-      <div className="absolute top-0 right-0 w-40 h-40 bg-blue-100/40 rounded-full blur-3xl -mr-20 -mt-20" />
+    <div className="relative overflow-hidden bg-[#111111] rounded-3xl shadow-2xl border border-white/10">
+      <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] -mr-32 -mt-32 pointer-events-none" />
       <div className="relative p-6">
         <div className="flex items-center gap-4 mb-6">
-          <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg shadow-blue-200">
-            <MapPin className="w-6 h-6 text-white" />
+          <div className="p-3 bg-blue-500/10 rounded-2xl border border-blue-500/20">
+            <MapPin className="w-6 h-6 text-blue-400" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-900 text-lg">Daily Attendance</h3>
-            <p className="text-xs font-medium text-slate-500 mt-0.5">GPS-verified check-in</p>
+            <h3 className="font-bold text-white text-lg tracking-tight">Attendance</h3>
+            <p className="text-xs font-medium text-slate-500 mt-0.5">GPS Authentication</p>
           </div>
         </div>
 
         {error && (
-          <div className="flex items-start gap-3 mb-5 p-4 bg-red-50 rounded-2xl border border-red-100">
-            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-            <p className="text-sm font-medium text-red-700">{error}</p>
+          <div className="flex items-start gap-3 mb-6 p-4 bg-red-500/10 rounded-2xl border border-red-500/20">
+            <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+            <p className="text-sm font-medium text-red-400/90">{error}</p>
           </div>
         )}
 
         <button
           onClick={handleCheckIn}
           disabled={loading}
-          className="w-full bg-gradient-to-r from-blue-600 via-blue-600 to-indigo-600 text-white font-bold py-4.5 rounded-2xl hover:shadow-xl hover:shadow-blue-300/30 active:scale-[0.97] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group"
+          className="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl hover:bg-blue-500 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group shadow-[0_0_40px_rgba(37,99,235,0.2)] text-sm tracking-wide"
         >
           {loading ? (
-            <><Loader className="w-5 h-5 animate-spin" /> Verifying Location...</>
+            <><Loader2 className="w-5 h-5 animate-spin" /> Securing Location...</>
           ) : (
             <><Navigation className="w-5 h-5 group-hover:rotate-45 transition-transform" /> Check In Now</>
           )}
         </button>
-        <p className="text-[10px] font-bold text-slate-400 mt-4 text-center uppercase tracking-widest">
-          GPS Authentication Required
-        </p>
       </div>
     </div>
   );

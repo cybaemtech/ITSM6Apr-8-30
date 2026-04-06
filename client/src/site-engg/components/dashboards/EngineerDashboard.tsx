@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   FileText, Clock, Calendar, Plus, Send, CheckCircle, AlertCircle,
   LogOut, Navigation, Briefcase, TrendingUp, MapPin, ArrowRight,
-  Sparkles, Download, ChevronRight, BarChart3, Activity
+  Sparkles, Download, ChevronRight, BarChart3, Activity, Map
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { checkInService } from '../../services/checkInService';
@@ -118,13 +118,13 @@ export default function EngineerDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0f1e] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
         <div className="text-center">
           <div className="relative w-16 h-16 mx-auto mb-5">
-            <div className="absolute inset-0 rounded-full border-[3px] border-blue-500/20"></div>
-            <div className="absolute inset-0 rounded-full border-[3px] border-transparent border-t-blue-400 animate-spin"></div>
+            <div className="absolute inset-0 rounded-full border-[2px] border-blue-500/10"></div>
+            <div className="absolute inset-0 rounded-full border-[2px] border-transparent border-t-blue-500 animate-spin"></div>
           </div>
-          <p className="text-slate-400 font-medium text-xs tracking-widest uppercase">Loading workspace...</p>
+          <p className="text-slate-500 font-bold text-[10px] tracking-[0.3em] uppercase">Initializing Workspace</p>
         </div>
       </div>
     );
@@ -140,37 +140,38 @@ export default function EngineerDashboard() {
   const greeting = today.getHours() < 12 ? 'Good Morning' : today.getHours() < 17 ? 'Good Afternoon' : 'Good Evening';
 
   return (
-    <div className="min-h-screen bg-[#f0f2f5]">
-      {/* ─── Premium Dark Header ─── */}
-      <div className="relative overflow-hidden bg-[#0f172a]">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-transparent to-violet-600/10"></div>
-        <div className="absolute -top-32 -right-32 w-96 h-96 bg-blue-500/[0.06] rounded-full blur-[120px]"></div>
-        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-violet-500/[0.04] rounded-full blur-[80px]"></div>
+    <div className="min-h-screen bg-[#0A0A0A] text-slate-200">
+      {/* Premium Header */}
+      <div className="relative overflow-hidden bg-[#111111] border-b border-white/5">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-transparent to-indigo-600/5"></div>
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-        <div className="relative max-w-7xl mx-auto px-8 py-8">
+        <div className="relative max-w-7xl mx-auto px-8 py-10">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-blue-400/50 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">{greeting}</p>
+              <p className="text-blue-400/60 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">{greeting}</p>
               <h1 className="text-3xl font-extrabold text-white tracking-tight">{user?.name}</h1>
-              <p className="text-slate-400 text-sm font-medium mt-1.5 flex items-center gap-1.5">
-                <Briefcase className="w-3.5 h-3.5" />
+              <p className="text-slate-400 text-sm font-medium mt-2 flex items-center gap-2">
+                <Briefcase className="w-4 h-4" />
                 Field Engineering Console
               </p>
             </div>
           </div>
 
           {/* Stat Cards */}
-          <div className="grid grid-cols-4 gap-4 mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
             {[
-              { label: 'Status', value: todayCheckIn ? (todayCheckIn.checkOutTime ? 'Complete' : 'On Duty') : 'Pending', icon: Activity, dot: todayCheckIn ? (todayCheckIn.checkOutTime ? 'bg-slate-500' : 'bg-emerald-400 animate-pulse') : 'bg-amber-400' },
-              { label: 'Total Reports', value: reports.length, icon: FileText, dot: null },
-              { label: 'Assignments', value: assignments.length, icon: TrendingUp, dot: null },
-              { label: 'Leave Requests', value: leaves.length, icon: Calendar, dot: null },
+              { label: 'Status', value: todayCheckIn ? (todayCheckIn.checkOutTime ? 'Complete' : 'On Duty') : 'Pending', icon: Activity, dot: todayCheckIn ? (todayCheckIn.checkOutTime ? 'bg-slate-500' : 'bg-emerald-400 animate-pulse') : 'bg-amber-400', color: 'blue' },
+              { label: 'Total Reports', value: reports.length, icon: FileText, dot: null, color: 'indigo' },
+              { label: 'Assignments', value: assignments.length, icon: TrendingUp, dot: null, color: 'purple' },
+              { label: 'Leave Requests', value: leaves.length, icon: Calendar, dot: null, color: 'rose' },
             ].map(stat => (
-              <div key={stat.label} className="bg-white/[0.05] backdrop-blur-sm rounded-2xl p-5 border border-white/[0.06] hover:bg-white/[0.08] transition-all group">
-                <div className="flex items-center gap-2.5 mb-3">
-                  <stat.icon className="w-4 h-4 text-slate-500 group-hover:text-blue-400 transition-colors" />
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{stat.label}</span>
+              <div key={stat.label} className="bg-white/5 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:bg-white/10 transition-all group">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`p-2 rounded-lg bg-${stat.color}-500/10 group-hover:bg-${stat.color}-500/20 transition-colors`}>
+                    <stat.icon className={`w-4 h-4 text-${stat.color}-400`} />
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{stat.label}</span>
                   {stat.dot && <div className={`w-2 h-2 rounded-full ml-auto ${stat.dot}`}></div>}
                 </div>
                 <p className="text-2xl font-extrabold text-white tracking-tight">{stat.value}</p>
@@ -180,14 +181,13 @@ export default function EngineerDashboard() {
         </div>
       </div>
 
-      {/* ─── Main Content ─── */}
       <div className="max-w-7xl mx-auto px-8 py-8">
         {/* Tab Switcher */}
-        <div className="flex gap-1 p-1 bg-white rounded-xl shadow-sm border border-slate-200 w-full max-w-md mb-8">
+        <div className="flex p-1 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/5 w-full max-w-md mb-8 shadow-2xl">
           {tabs.map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id as any)}
-              className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
-                activeTab === tab.id ? 'bg-[#0f172a] text-white shadow-md' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+              className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold tracking-wide transition-all flex items-center justify-center gap-2 ${
+                activeTab === tab.id ? 'bg-white/10 text-white shadow-lg border border-white/10' : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
               }`}>
               <tab.icon className="w-4 h-4" />
               {tab.label}
@@ -199,74 +199,94 @@ export default function EngineerDashboard() {
         {activeTab === 'attendance' && (
           <div className="grid gap-6 md:grid-cols-2 max-w-5xl">
             {/* Check-in Card */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-              <div className="bg-[#0f172a] px-6 py-4 flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-blue-400" />
+            <div className="bg-[#111111] rounded-3xl border border-white/5 shadow-2xl overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 rounded-full blur-[60px] pointer-events-none"></div>
+              
+              <div className="px-6 py-5 border-b border-white/5 flex items-center gap-3">
+                <div className="p-2 bg-blue-500/10 rounded-xl">
+                  <MapPin className="w-5 h-5 text-blue-400" />
+                </div>
                 <div>
-                  <h2 className="text-white font-bold text-sm">Daily Attendance</h2>
-                  <p className="text-slate-400 text-[10px] font-medium">GPS-verified check-in system</p>
+                  <h2 className="text-white font-bold tracking-tight">Daily Attendance</h2>
+                  <p className="text-slate-400 text-xs font-medium">GPS-verified authentication</p>
                 </div>
               </div>
 
-              <div className="p-6">
-                <div className="p-4 bg-[#f8f9fb] rounded-xl border border-slate-100 mb-5">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-3 h-3 rounded-full shadow-lg ${todayCheckIn ? (todayCheckIn.checkOutTime ? 'bg-slate-400' : 'bg-emerald-500 animate-pulse shadow-emerald-400/50') : 'bg-amber-400 shadow-amber-300/50'}`}></div>
+              <div className="p-6 relative z-10">
+                <div className="p-5 bg-black/40 rounded-2xl border border-white/5 mb-6 backdrop-blur-md">
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <div className={`w-3 h-3 rounded-full ${todayCheckIn ? (todayCheckIn.checkOutTime ? 'bg-slate-500' : 'bg-emerald-500 animate-pulse') : 'bg-amber-500'}`}></div>
+                      {!todayCheckIn || (!todayCheckIn.checkOutTime) && (
+                        <div className={`absolute inset-0 rounded-full blur-[4px] ${todayCheckIn ? 'bg-emerald-500' : 'bg-amber-500'}`}></div>
+                      )}
+                    </div>
                     <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Current Status</p>
-                      <p className="font-bold text-slate-800">{todayCheckIn ? (todayCheckIn.checkOutTime ? 'Session Complete' : 'On Duty') : 'Not Checked In'}</p>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">Current Status</p>
+                      <p className="font-bold text-white text-lg tracking-tight">
+                        {todayCheckIn ? (todayCheckIn.checkOutTime ? 'Session Complete' : 'On Duty') : 'Not Checked In'}
+                      </p>
                     </div>
                   </div>
                 </div>
 
                 {!todayCheckIn ? (
-                  <button onClick={handleCheckIn} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2.5 active:scale-[0.98] shadow-md shadow-blue-600/20 group">
+                  <button onClick={handleCheckIn} className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2.5 active:scale-[0.98] shadow-[0_0_30px_rgba(37,99,235,0.2)] group text-sm tracking-wide">
                     <Navigation className="w-5 h-5 group-hover:rotate-45 transition-transform" />
                     Check In Now
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform opacity-50" />
                   </button>
                 ) : !todayCheckIn.checkOutTime ? (
-                  <button onClick={handleCheckOut} className="w-full py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2.5 active:scale-[0.98] shadow-md shadow-rose-600/20">
+                  <button onClick={handleCheckOut} className="w-full py-4 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 rounded-2xl font-bold transition-all flex items-center justify-center gap-2.5 active:scale-[0.98] text-sm tracking-wide">
                     <LogOut className="w-5 h-5" />
                     Check Out
                   </button>
                 ) : (
-                  <div className="text-center p-6 bg-emerald-50 rounded-xl border border-emerald-200 flex flex-col items-center gap-2">
-                    <CheckCircle className="w-10 h-10 text-emerald-600" />
-                    <p className="font-bold text-emerald-800">Session Complete</p>
-                    <p className="text-sm text-emerald-600/70">Great work today!</p>
+                  <div className="text-center p-6 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 flex flex-col items-center gap-3">
+                    <CheckCircle className="w-8 h-8 text-emerald-400" />
+                    <div>
+                      <p className="font-bold text-emerald-400">Session Complete</p>
+                      <p className="text-xs text-emerald-400/60 mt-1">Attendance recorded for today</p>
+                    </div>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Recent Activity */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-              <div className="bg-[#0f172a] px-6 py-4 flex items-center gap-3">
-                <Clock className="w-5 h-5 text-indigo-400" />
-                <h2 className="text-white font-bold text-sm">Recent Activity</h2>
-                <span className="ml-auto text-slate-500 text-[10px] font-bold">{checkIns.length} records</span>
+            <div className="bg-[#111111] rounded-3xl border border-white/5 shadow-2xl overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-indigo-500/10 rounded-full blur-[60px] pointer-events-none"></div>
+
+              <div className="px-6 py-5 border-b border-white/5 flex items-center gap-3 relative z-10">
+                <div className="p-2 bg-indigo-500/10 rounded-xl">
+                  <Clock className="w-5 h-5 text-indigo-400" />
+                </div>
+                <h2 className="text-white font-bold tracking-tight">Recent Activity</h2>
+                <span className="ml-auto text-slate-500 text-[10px] font-bold uppercase tracking-widest bg-white/5 px-2.5 py-1 rounded-md">{checkIns.length} logs</span>
               </div>
-              <div className="p-5 space-y-2 max-h-[400px] overflow-y-auto">
+              <div className="p-5 space-y-3 max-h-[400px] overflow-y-auto relative z-10 pr-2">
                 {checkIns.slice(0, 8).map(ci => (
-                  <div key={ci.id} className="flex items-center gap-3 p-3.5 bg-[#f8f9fb] rounded-xl border border-slate-100 hover:border-blue-200 transition-colors group">
-                    <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center shrink-0 group-hover:bg-blue-100 transition-colors">
-                      <Clock className="w-4 h-4 text-blue-600" />
+                  <div key={ci.id} className="flex items-center gap-4 p-4 bg-black/40 rounded-2xl border border-white/5 hover:bg-white/5 transition-colors group">
+                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0 group-hover:bg-blue-500/20 transition-colors border border-blue-500/20">
+                      <Map className="w-4 h-4 text-blue-400" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-slate-800">
+                      <p className="text-sm font-bold text-slate-200">
                         {new Date(ci.checkInTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        {ci.checkOutTime && <span className="text-slate-400 font-normal"> → {new Date(ci.checkOutTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>}
+                        {ci.checkOutTime && <span className="text-slate-500 font-medium"> → {new Date(ci.checkOutTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>}
                       </p>
-                      <p className="text-[11px] text-slate-500 truncate">{ci.locationName || 'Main Site'}</p>
+                      <p className="text-xs text-slate-500 truncate mt-0.5">{ci.locationName || 'Main Site'}</p>
                     </div>
-                    <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${ci.checkOutTime ? 'bg-slate-100 text-slate-500' : 'bg-emerald-50 text-emerald-600'}`}>
+                    <span className={`px-2.5 py-1 rounded text-[9px] font-bold uppercase tracking-widest border ${ci.checkOutTime ? 'bg-slate-500/10 text-slate-400 border-slate-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}`}>
                       {ci.checkOutTime ? 'Done' : 'Active'}
                     </span>
                   </div>
                 ))}
                 {checkIns.length === 0 && (
-                  <div className="text-center py-10"><Clock className="w-8 h-8 mx-auto mb-3 text-slate-200" /><p className="text-sm text-slate-400">No activity yet</p></div>
+                  <div className="text-center py-12">
+                    <Clock className="w-8 h-8 mx-auto mb-3 text-slate-600" />
+                    <p className="text-sm font-medium text-slate-500">No activity recorded</p>
+                  </div>
                 )}
               </div>
             </div>
@@ -277,72 +297,83 @@ export default function EngineerDashboard() {
         {activeTab === 'reports' && (
           <div className="grid gap-6 md:grid-cols-2 max-w-6xl">
             {/* Submit Report */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden h-fit">
-              <div className="bg-[#0f172a] px-6 py-4 flex items-center gap-3">
-                <FileText className="w-5 h-5 text-blue-400" />
+            <div className="bg-[#111111] rounded-3xl border border-white/5 shadow-2xl overflow-hidden h-fit relative">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-indigo-500/10 rounded-full blur-[60px] pointer-events-none"></div>
+              
+              <div className="px-6 py-5 border-b border-white/5 flex items-center gap-3 relative z-10">
+                <div className="p-2 bg-indigo-500/10 rounded-xl">
+                  <FileText className="w-5 h-5 text-indigo-400" />
+                </div>
                 <div>
-                  <h2 className="text-white font-bold text-sm">Submit Daily Report</h2>
-                  <p className="text-slate-400 text-[10px] font-medium">Record today's progress</p>
+                  <h2 className="text-white font-bold tracking-tight">Submit Report</h2>
+                  <p className="text-slate-400 text-xs font-medium">Log daily progress</p>
                 </div>
               </div>
-              <div className="p-6">
-                <form onSubmit={handleReportSubmit} className="space-y-4">
+
+              <div className="p-6 relative z-10">
+                <form onSubmit={handleReportSubmit} className="space-y-5">
                   <div>
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 block">Select Client</label>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block pl-1">Client / Project</label>
                     <select required value={reportForm.clientId} onChange={e => setReportForm({ ...reportForm, clientId: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#f8f9fb] border border-slate-200 rounded-xl text-sm font-medium focus:border-blue-400 focus:ring-2 focus:ring-blue-100 focus:bg-white outline-none transition-all appearance-none cursor-pointer">
-                      <option value="">Choose a client...</option>
-                      {assignments.map((a, idx) => <option key={`${a.clientId}-${idx}`} value={a.clientId}>{a.clientName}</option>)}
+                      className="w-full px-4 py-3.5 bg-black/50 border border-white/10 rounded-xl text-sm font-medium focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all text-white appearance-none cursor-pointer">
+                      <option value="" className="bg-[#111]">Choose a client...</option>
+                      {assignments.map((a, idx) => <option key={`${a.clientId}-${idx}`} value={a.clientId} className="bg-[#111]">{a.clientName}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 block">Work Completed</label>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block pl-1">Work Accomplished</label>
                     <textarea required value={reportForm.workDone} onChange={e => setReportForm({ ...reportForm, workDone: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#f8f9fb] border border-slate-200 rounded-xl text-sm font-medium focus:border-blue-400 focus:ring-2 focus:ring-blue-100 focus:bg-white outline-none transition-all h-32 resize-none" placeholder="Describe tasks completed today..." />
+                      className="w-full px-4 py-3.5 bg-black/50 border border-white/10 rounded-xl text-sm font-medium focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all h-32 resize-none text-white placeholder:text-slate-600" placeholder="Detail the tasks completed..." />
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 block">Issues <span className="text-slate-300">(Optional)</span></label>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block pl-1">Blockers <span className="text-slate-600">(Optional)</span></label>
                     <textarea value={reportForm.issues} onChange={e => setReportForm({ ...reportForm, issues: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#f8f9fb] border border-slate-200 rounded-xl text-sm font-medium focus:border-blue-400 focus:ring-2 focus:ring-blue-100 focus:bg-white outline-none transition-all h-20 resize-none" placeholder="Any blockers or concerns?" />
+                      className="w-full px-4 py-3.5 bg-black/50 border border-white/10 rounded-xl text-sm font-medium focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all h-20 resize-none text-white placeholder:text-slate-600" placeholder="Any issues to report?" />
                   </div>
-                  <button type="submit" className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-md shadow-blue-600/20 group">
-                    <Send className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    Submit Report
+                  <button type="submit" className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-sm tracking-wide flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(79,70,229,0.2)] group">
+                    <Send className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform opacity-70" />
+                    Submit Log
                   </button>
                 </form>
               </div>
             </div>
 
             {/* Recent Reports */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-              <div className="bg-[#0f172a] px-6 py-4 flex items-center gap-3">
-                <BarChart3 className="w-5 h-5 text-indigo-400" />
-                <h2 className="text-white font-bold text-sm">Recent Reports</h2>
-                <span className="ml-auto text-slate-500 text-[10px] font-bold">{reports.length} total</span>
+            <div className="bg-[#111111] rounded-3xl border border-white/5 shadow-2xl overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-purple-500/10 rounded-full blur-[60px] pointer-events-none"></div>
+              
+              <div className="px-6 py-5 border-b border-white/5 flex items-center gap-3 relative z-10">
+                <div className="p-2 bg-purple-500/10 rounded-xl">
+                  <BarChart3 className="w-5 h-5 text-purple-400" />
+                </div>
+                <h2 className="text-white font-bold tracking-tight">Recent Logs</h2>
+                <span className="ml-auto text-slate-500 text-[10px] font-bold uppercase tracking-widest bg-white/5 px-2.5 py-1 rounded-md">{reports.length} total</span>
               </div>
-              <div className="p-5 space-y-3 max-h-[500px] overflow-y-auto">
+              <div className="p-5 space-y-4 max-h-[600px] overflow-y-auto relative z-10 pr-2">
                 {reports.length > 0 ? reports.sort((a, b) => new Date(b.date || b.createdAt).getTime() - new Date(a.date || a.createdAt).getTime()).slice(0, 10).map(report => (
-                  <div key={report.id} className="p-4 bg-[#f8f9fb] rounded-xl border border-slate-100 hover:border-blue-200 transition-colors group">
-                    <div className="flex justify-between items-start mb-2">
+                  <div key={report.id} className="p-5 bg-black/40 rounded-2xl border border-white/5 hover:bg-white/5 transition-colors group">
+                    <div className="flex justify-between items-start mb-3">
                       <div>
-                        <p className="font-bold text-slate-800 text-sm">{report.clientName || 'Report'}</p>
-                        <p className="text-[10px] text-slate-400 mt-0.5 flex items-center gap-1"><Calendar className="w-3 h-3" />{new Date(report.date || report.createdAt).toLocaleDateString()}</p>
+                        <p className="font-bold text-slate-200">{report.clientName || 'General Report'}</p>
+                        <p className="text-[10px] text-slate-500 font-medium uppercase tracking-widest mt-1 flex items-center gap-1.5">
+                          <Calendar className="w-3 h-3" />
+                          {new Date(report.date || report.createdAt).toLocaleDateString()}
+                        </p>
                       </div>
-                      <button onClick={async () => { const e = prompt("Recipient email:"); if (e) { try { const r = await fetch(`/api/reports/${report.id}/send-email`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: e }) }); const d = await r.json(); alert(d.message || 'Sent!'); } catch { alert('Failed'); } } }}
-                        className="text-[9px] px-2.5 py-1 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 flex items-center gap-1 transition-colors font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100">
-                        <Send className="w-3 h-3" /> Send
-                      </button>
                     </div>
-                    <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">{report.workDone}</p>
+                    <p className="text-sm text-slate-400 line-clamp-3 leading-relaxed">{report.workDone}</p>
                     {report.issues && (
-                      <div className="mt-2 flex items-start gap-2 p-2.5 bg-amber-50 rounded-lg border border-amber-100">
-                        <AlertCircle className="w-3 h-3 text-amber-600 mt-0.5 shrink-0" />
-                        <span className="text-[11px] text-amber-700">{report.issues}</span>
+                      <div className="mt-4 flex items-start gap-2 p-3 bg-red-500/10 rounded-xl border border-red-500/20">
+                        <AlertCircle className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />
+                        <span className="text-xs font-medium text-red-300">{report.issues}</span>
                       </div>
                     )}
                   </div>
                 )) : (
-                  <div className="text-center py-14"><FileText className="w-8 h-8 mx-auto mb-3 text-slate-200" /><p className="text-sm text-slate-400">No reports yet</p></div>
+                  <div className="text-center py-16">
+                    <FileText className="w-10 h-10 mx-auto mb-3 text-slate-600" />
+                    <p className="text-sm font-medium text-slate-500">No reports submitted</p>
+                  </div>
                 )}
               </div>
             </div>
@@ -352,62 +383,79 @@ export default function EngineerDashboard() {
         {/* ═══ LEAVE ═══ */}
         {activeTab === 'leave' && (
           <div className="grid gap-6 md:grid-cols-2 max-w-6xl">
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden h-fit">
-              <div className="bg-[#0f172a] px-6 py-4 flex items-center gap-3">
-                <Calendar className="w-5 h-5 text-violet-400" />
+            <div className="bg-[#111111] rounded-3xl border border-white/5 shadow-2xl overflow-hidden h-fit relative">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-rose-500/10 rounded-full blur-[60px] pointer-events-none"></div>
+
+              <div className="px-6 py-5 border-b border-white/5 flex items-center gap-3 relative z-10">
+                <div className="p-2 bg-rose-500/10 rounded-xl">
+                  <Calendar className="w-5 h-5 text-rose-400" />
+                </div>
                 <div>
-                  <h2 className="text-white font-bold text-sm">Request Leave</h2>
-                  <p className="text-slate-400 text-[10px] font-medium">Submit for HR approval</p>
+                  <h2 className="text-white font-bold tracking-tight">Request Leave</h2>
+                  <p className="text-slate-400 text-xs font-medium">Submit for HR approval</p>
                 </div>
               </div>
-              <div className="p-6">
-                <form onSubmit={handleLeaveRequest} className="space-y-4">
+              
+              <div className="p-6 relative z-10">
+                <form onSubmit={handleLeaveRequest} className="space-y-5">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 block">Start Date</label>
+                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block pl-1">Start Date</label>
                       <input required type="date" value={leaveForm.startDate} onChange={e => setLeaveForm({ ...leaveForm, startDate: e.target.value })}
-                        className="w-full px-4 py-3 bg-[#f8f9fb] border border-slate-200 rounded-xl text-sm font-medium focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:bg-white outline-none transition-all" />
+                        className="w-full px-4 py-3.5 bg-black/50 border border-white/10 rounded-xl text-sm font-medium focus:border-rose-500/50 focus:ring-2 focus:ring-rose-500/50 outline-none transition-all text-white color-scheme-dark" />
                     </div>
                     <div>
-                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 block">End Date</label>
+                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block pl-1">End Date</label>
                       <input required type="date" value={leaveForm.endDate} onChange={e => setLeaveForm({ ...leaveForm, endDate: e.target.value })}
-                        className="w-full px-4 py-3 bg-[#f8f9fb] border border-slate-200 rounded-xl text-sm font-medium focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:bg-white outline-none transition-all" />
+                        className="w-full px-4 py-3.5 bg-black/50 border border-white/10 rounded-xl text-sm font-medium focus:border-rose-500/50 focus:ring-2 focus:ring-rose-500/50 outline-none transition-all text-white color-scheme-dark" />
                     </div>
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 block">Reason</label>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block pl-1">Reason</label>
                     <textarea required value={leaveForm.reason} onChange={e => setLeaveForm({ ...leaveForm, reason: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#f8f9fb] border border-slate-200 rounded-xl text-sm font-medium focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:bg-white outline-none transition-all h-24 resize-none" placeholder="Briefly explain your reason..." />
+                      className="w-full px-4 py-3.5 bg-black/50 border border-white/10 rounded-xl text-sm font-medium focus:border-rose-500/50 focus:ring-2 focus:ring-rose-500/50 outline-none transition-all h-28 resize-none text-white placeholder:text-slate-600" placeholder="Provide a brief explanation..." />
                   </div>
-                  <button type="submit" className="w-full py-3.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-md shadow-violet-600/20">
-                    <Plus className="w-4 h-4" /> Submit Request
+                  <button type="submit" className="w-full py-4 bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-bold text-sm tracking-wide flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(225,29,72,0.2)]">
+                    <Plus className="w-4 h-4 opacity-70" /> Submit Request
                   </button>
                 </form>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-              <div className="bg-[#0f172a] px-6 py-4 flex items-center gap-3">
-                <Calendar className="w-5 h-5 text-indigo-400" />
-                <h2 className="text-white font-bold text-sm">Leave History</h2>
-                <span className="ml-auto text-slate-500 text-[10px] font-bold">{leaves.length} total</span>
+            <div className="bg-[#111111] rounded-3xl border border-white/5 shadow-2xl overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-amber-500/10 rounded-full blur-[60px] pointer-events-none"></div>
+
+              <div className="px-6 py-5 border-b border-white/5 flex items-center gap-3 relative z-10">
+                <div className="p-2 bg-amber-500/10 rounded-xl">
+                  <Clock className="w-5 h-5 text-amber-400" />
+                </div>
+                <h2 className="text-white font-bold tracking-tight">Leave History</h2>
+                <span className="ml-auto text-slate-500 text-[10px] font-bold uppercase tracking-widest bg-white/5 px-2.5 py-1 rounded-md">{leaves.length} records</span>
               </div>
-              <div className="p-5 space-y-3 max-h-[500px] overflow-y-auto">
+              <div className="p-5 space-y-4 max-h-[500px] overflow-y-auto relative z-10 pr-2">
                 {leaves.length > 0 ? leaves.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()).map(leave => (
-                  <div key={leave.id} className="p-4 bg-[#f8f9fb] rounded-xl border border-slate-100 hover:border-violet-200 transition-colors">
-                    <div className="flex justify-between items-start mb-2">
-                      <span className="text-sm font-bold text-slate-700 flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                        {new Date(leave.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} — {new Date(leave.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  <div key={leave.id} className="p-5 bg-black/40 rounded-2xl border border-white/5">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <p className="font-bold text-slate-200">
+                          {new Date(leave.startDate).toLocaleDateString(undefined, {month:'short', day:'numeric'})} - {new Date(leave.endDate).toLocaleDateString(undefined, {month:'short', day:'numeric'})}
+                        </p>
+                      </div>
+                      <span className={`px-2.5 py-1 rounded text-[9px] font-bold uppercase tracking-widest border ${
+                        leave.status === 'approved' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                        leave.status === 'rejected' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
+                        'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                      }`}>
+                        {leave.status}
                       </span>
-                      <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
-                        leave.status === 'approved' ? 'bg-emerald-100 text-emerald-700' : leave.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
-                      }`}>{leave.status}</span>
                     </div>
-                    <p className="text-xs text-slate-500 italic bg-white p-2.5 rounded-lg">"{leave.reason}"</p>
+                    <p className="text-sm text-slate-400 italic bg-white/5 p-3 rounded-xl border border-white/5">"{leave.reason}"</p>
                   </div>
                 )) : (
-                  <div className="text-center py-14"><Calendar className="w-8 h-8 mx-auto mb-3 text-slate-200" /><p className="text-sm text-slate-400">No leave requests</p></div>
+                  <div className="text-center py-16">
+                    <Calendar className="w-10 h-10 mx-auto mb-3 text-slate-600" />
+                    <p className="text-sm font-medium text-slate-500">No leave history</p>
+                  </div>
                 )}
               </div>
             </div>
