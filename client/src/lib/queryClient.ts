@@ -3,6 +3,7 @@ import { QueryClient, QueryFunction } from "@tanstack/react-query";
 // Environment-aware API configuration
 const isProdDomain = /(^|\.)cybaemtech\.(in|net|com)$/i.test(window.location.hostname);
 const forcePhpBackend = import.meta.env.VITE_USE_PHP_BACKEND === 'true';
+const apiBaseUrl = import.meta.env.VITE_API_URL || '/api';
 
 // Production PHP base URL
 const PRODUCTION_PHP_BASE = 'https://cybaemtech.in/itsm_app/php';
@@ -14,15 +15,29 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
-// Simplified backend detection - always use PHP for IIS deployment
 function getBackendType(): 'node' | 'php' {
-  console.log('✅ Backend forced to PHP for IIS deployment');
-  return 'php';
+  if (forcePhpBackend) {
+    return 'php';
+  }
+
+  if (isProdDomain) {
+    return 'php';
+  }
+
+  return 'node';
 }
 
 export function getApiUrl(endpoint: string): string {
-  const PHP_BASE = '/php'; 
-  let phpEndpoint = endpoint.startsWith('/') ? endpoint.substring(1) : endpoint;
+  const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  if (getBackendType() === 'node') {
+    if (normalizedEndpoint.startsWith(apiBaseUrl)) {
+      return normalizedEndpoint;
+    }
+    return `${apiBaseUrl}${normalizedEndpoint}`;
+  }
+
+  const PHP_BASE = '/php';
+  let phpEndpoint = normalizedEndpoint.startsWith('/') ? normalizedEndpoint.substring(1) : normalizedEndpoint;
   
   if (phpEndpoint.startsWith('api/')) {
     // Already has PHP extension?
